@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - rpgsite3</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/style.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/fontawesome-all.min.css"/>
+       
+    </environment>
+</head>
+<body class="@ViewData["bodyclass"]">
+
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <div class="container">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fa fa-bars"></i>
+            </button>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">2Dee ArrPeeGee</a>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a class="nav-link" asp-area="" asp-controller="Game" asp-action="Index">Game</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid nopadding">
+        @RenderBody()
+        <footer class="footer">
+            <div class="row animate slide-up">
+                <!-- left -->
+                <div class="col-md-4 footer-left">
+                    <img src="~/images/logocompany.png" width="100" height="50">
+                    <p class="footer-links">
+                        <a asp-action="index" asp-controller="home">Home</a>
+                        <a asp-action="Game" asp-controller="home">Game</a>
+                    </p>
+                    <p class="footer-company-name">Generic Company &copy; 2018</p>
+                </div>
+                <!-- center -->
+                <div class="col-md-4 footer-center">
+                    <div>
+                        <i class="fa fa-map-marker"></i>
+                        <p><span>Narnia Laan</span> Narnia, Wonderland</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-phone"></i>
+                        <p>+12 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-envelope"></i>
+                        <p><a href="mailto:contact@grindinggear.com">contact@totallylegitcompany.com</a></p>
+                    </div>
+                </div>
+                <!-- right -->
+                <div class="col-md-4 footer-right">
+                    <p class="footer-about">
+                        <span>About Generic Company</span>
+                        Generic Company was founded in 2018 with one goal in mind, to be the most generic company out there. We strive for mediocrity in our work and hope you can see this too.
+                    </p>
+                    <div class="footer-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/script.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+    </environment>
+</body>
+</html>

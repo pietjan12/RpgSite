@@ -1,0 +1,97 @@
+﻿@model rpgsite3.Models.NewsModel
+
+<div class="intro">
+    <!-- html5 video -->
+    <video class="video" preload="auto" playsinline="" muted="" autoplay="" loop="true" data-width="1280" data-height="720">
+        <source src="~/Media/trailer.mp4" type="video/mp4">
+    </video>
+    <a id="ScrollDown" href="#newsSummary"><span></span>Scroll</a>
+    <!-- html5 video -->
+</div>
+
+<section class="bg-primary text-center" id="newsSummary">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h5 class="news-heading col-sm-12">NEWS</h5>
+        </div>
+    </div>
+
+    <!-- nieuws gedeelte -->
+    <div class="row">
+        <div class="col-sm col-lg-6 col-sm-8 nopadding">
+            <a href="news/@Model.News[0].Id">
+                <div class="news-item animate slide-left">
+                    
+                    <div class='bg-shadowed' style='background-image: url(@Model.News[0].Img_Loc)'>
+                    </div>
+                    <div class="overlay">
+                    </div>
+                    <div class="news-text">
+                        @Model.News[0].Title
+                        <h5></h5>
+                        <p class="d-none d-md-block">
+                            <!-- post text -->
+                            @Model.News[0].Text
+                        </p>
+                        <h6>Read More</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-sm col-lg-3 col-sm-4 nopadding">
+            <div class="col-md-12 nopadding">
+                <!-- article id -->
+                <a href="news/@Model.News[1].Id">
+                    <div class="news-item animate slide-left half">
+                        <div class='bg-shadowed' style='background-image: url(@Model.News[1].Img_Loc)'></div>
+                        <div class="overlay"></div>
+                        <div class="news-text">
+                            <!-- Post Title -->
+                            @Model.News[1].Title
+                            <h5>@Model.News[1].Text</h5>
+                            <h6>Read More</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-12 nopadding">
+                <!-- Post id -->
+                <a href="news/@Model.News[2].Id">
+                    <div class="news-item animate slide-left half">
+                        <!-- Image Data -->
+                        <div class='bg-shadowed' style='background-image: url(@Model.News[2].Img_Loc)'>
+                        </div>
+                        <div class="overlay">
+                        </div>
+                        <div class="news-text">
+                            <!-- Post Title -->
+                            @Model.News[2].Title
+                            <h5>@Model.News[2].Text</h5>
+                            <h6>Read More</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="d-none d-lg-block col-lg-3 list-wrapper nopadding">
+            <div class="ul-scaler">
+                <ul class="news-list">
+
+                    @foreach (var news in Model.News)
+                    {
+                        @:<li class='animate slide-left'>
+                            <div class="inner">
+                                <a href="news/@news.Id">@news.Title</a>
+                                <p>@news.PostDate.ToString("dd/MM/yyyy")</p>
+                            </div>
+                        @:</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- nieuws gedeelte -->
+</section>
