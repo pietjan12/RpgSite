@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Data.Models;
+using Api.Models;
 
 namespace rpgsite3.Models
 {

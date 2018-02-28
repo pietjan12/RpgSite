@@ -1,9 +1,9 @@
-﻿using Data.Models;
+﻿using Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Data
+namespace Api.Interfaces
 {
     //Repository Context
     public interface IEnemies

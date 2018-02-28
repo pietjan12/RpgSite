@@ -1,0 +1,17 @@
+﻿@model rpgsite3.Models.NewsModel
+
+
+<section class="news-primary text-center">
+    <div class="container container-narrow newsplace  animate slide-left">
+        <div class="row">
+            <div class="col-sm-12 headercolor">
+                <h1 class="articlehead">@Model.News.First().Title</h1>
+                <p class="authortext">@Model.News.First().Author - @Model.News.First().PostDate.ToString("dd/MM/yyyy")</p>
+                <div class="img-wrapper">
+                    <img src="/@Model.News.First().Img_Loc" class="fullimg">
+                </div>
+                <p class="articletext">@Model.News.First().Text</p>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Data;
-using Data.Models;
+using Api.Models;
+using Api.Interfaces;
 using System.Linq;
 
 namespace Services

@@ -1,66 +1,68 @@
-@model rpgsite3.Models.GameIndexModel
-@{ 
+﻿@model rpgsite3.Models.GameIndexModel
+@{
     int counter = 0;
 }
 
-    <section class="header-image">
-      <h1 class="text-center gametext">About 2Dee ArrPeeGee</h1>
-    </section>
+<section class="header-image">
+    <h1 class="text-center gametext">About 2Dee ArrPeeGee</h1>
+</section>
 
-    <section class="text-center bg-game" id="overview">
-      <div class="wrapped">
-         <div class="text-center gametext">2Dee ArrPeeGee is a Free To Play Game about choice </div>
-         <p class="smalltext text-center">2Dee ArrPeeGee is an RPG set in the fantasy world of narnia. It is designed around a strong battle system you may be familiar with if you played pokemon. We want to give players the choice to play the game their way.</p>
-         <ul class="feature-list">
-          <li>
-            <img class="img-center icon" src="images/windows.png">            
-            <span>Windows</span>
-          </li>
-          <li>
-            <img class="img-center icon" src="images/linux.png">            
-            <span>Linux</span>
-          </li>
-          <li>
-            <img class="img-center icon" src="images/f2p.png">           
-            <span>Play for free</span>
-          </li>
-         </ul>
-       </div>
-       <div class="devices">
-          <img class="img-center" src="images/devices.png">
-       </div>
-       <div class="wrapped">
-         <div class="text-center gametext">
+<section class="text-center bg-game" id="overview">
+    <div class="wrapped">
+        <div class="text-center gametext">2Dee ArrPeeGee is a Free To Play Game about choice </div>
+        <p class="smalltext text-center">2Dee ArrPeeGee is an RPG set in the fantasy world of narnia. It is designed around a strong battle system you may be familiar with if you played pokemon. We want to give players the choice to play the game their way.</p>
+        <ul class="feature-list">
+            <li>
+                <img class="img-center icon" src="images/windows.png">
+                <span>Windows</span>
+            </li>
+            <li>
+                <img class="img-center icon" src="images/linux.png">
+                <span>Linux</span>
+            </li>
+            <li>
+                <img class="img-center icon" src="images/f2p.png">
+                <span>Play for free</span>
+            </li>
+        </ul>
+    </div>
+    <div class="devices">
+        <img class="img-center" src="images/devices.png">
+    </div>
+    <div class="wrapped">
+        <div class="text-center gametext">
             A full fledged RPG experience on your favorite devices
-         </div>
-         <p>Dive into a rich RPG experience filled with places to explore and loot to obtain.
-         </p>
-       </div>
-    </section>
-
-    <section class="text-center bg-game" id="game">
-        <div class="wrapped exilelist">
-            <div class="text-center gametext">
-                Meet the monsters.
-            </div>
-            <p class="exileText smalltext summary">Meet your enemies</p>
-            <div class="hero-scroll animate slide-left">
- 
-                @foreach (var enemy in Model.enemies)
-                {
-                    counter = counter + 1;
-
-                    @:<div class="hero @(counter == 4 ? "inview" : "")">
-            
-                        <img class="hero-img" src="@enemy.image_url">
-                        <div class="text">
-                            <h6>
-                                @enemy.name
-                            </h6>
-                            <p class="exileText smalltext d-none d-md-block">@enemy.story</p>
-                        </div>
-                    @:</div>
-                }
-            </div>
         </div>
-    </section>
+        <p>
+            Dive into a rich RPG experience filled with places to explore and loot to obtain.
+        </p>
+    </div>
+</section>
+
+<section class="text-center bg-game" id="game">
+    <div class="wrapped exilelist">
+        <div class="text-center gametext">
+            Meet the monsters.
+        </div>
+        <p class="exileText smalltext summary">Meet your enemies</p>
+        <div class="hero-scroll animate slide-left">
+
+            @foreach (var enemy in Model.enemies)
+            {
+                counter = counter + 1;
+
+                @:<div class="hero @(counter == 4 ? "inview" : "")">
+
+
+                    <img class="hero-img" src="@enemy.image_url">
+                    <div class="text">
+                        <h6>
+                            @enemy.name
+                        </h6>
+                        <p class="exileText smalltext d-none d-md-block">@enemy.story</p>
+                    </div>
+                @:</div>
+                }
+        </div>
+    </div>
+</section>

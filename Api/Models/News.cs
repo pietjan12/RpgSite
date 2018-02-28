@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Data.Models
+namespace Api.Models
 {
     public class News { 
         public int Id { get; set; }

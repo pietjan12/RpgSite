@@ -16,7 +16,21 @@ namespace rpgsite3.Controllers
         {
             _NewsService = NewsService;
         }
-        public IActionResult Index(int id)
+        public IActionResult Index()
+        {
+            ViewData["Title"] = "News";
+
+            var NewsList = _NewsService.GetAllNews();
+
+            var model = new NewsModel()
+            {
+                News = NewsList.ToList()
+            };
+
+            return View(model);
+        }
+
+        public IActionResult News(int id)
         {
             ViewData["Title"] = "News";
 

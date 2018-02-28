@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Data;
 using Services;
 using Services.Interfaces;
-using Data.Interfaces;
+using Api.Interfaces;
 
 namespace rpgsite3
 {
@@ -25,6 +25,9 @@ namespace rpgsite3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Service voor het opvragen van connectiestring
+            services.AddSingleton(_ => Configuration);
+
             //News services
             services.AddScoped<INewsService, NewsService>();
             services.AddTransient<INews, NewsRepository>();
@@ -52,10 +55,21 @@ namespace rpgsite3
 
             app.UseMvc(routes =>
             {
+
+                routes.MapRoute(
+                name: "realnews",
+                template: "News/",
+                defaults: new { controller = "News", action = "Index" });
+
                 routes.MapRoute(
                 name: "news",
                 template: "News/{*id}",
-                defaults: new { controller = "News", action = "Index" });
+                defaults: new { controller = "News", action = "News" });
+
+                routes.MapRoute(
+                  name: "ActualGame",
+                  template: "Game/Game",
+                  defaults: new { controller = "Game", action = "Game" });
 
                 routes.MapRoute(
                 name: "game",
@@ -64,8 +78,8 @@ namespace rpgsite3
 
 
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}");
+                name: "default",
+                template: "{controller=Home}/{action=Index}");
 
             });
         }

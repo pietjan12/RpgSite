@@ -835,7 +835,7 @@ font-weight: 600;
 }
 
 .bg-img-2 {
-    background-image: url(../images/slide2.jpg);
+    background-image: url(/images/slide2.jpg);
 }
 
 .bg-img-3 {
@@ -844,6 +844,73 @@ font-weight: 600;
 /* Carousel plaatjes */
 
 /* overig */
+
+/* Character page */
+.character {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas: "leftitem image rightitem" "leftitem image rightitem" "leftitem image rightitem";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.user-background {
+    position: relative;
+    background-image: url(../images/user-background.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    height: 100vh;
+    height: 100vh;
+}
+
+.left-items{
+    margin-top: 20px;
+    grid-area: leftitem;
+    
+}
+
+.character-img{
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    grid-area: image;
+    text-align: center;
+    align-content: center;
+}
+
+.right-items {
+    margin-top: 20px;
+    grid-area: rightitem;
+    margin-left: auto;
+}
+
+
+
+.square {
+    width: 75px;
+    height: 75px;
+    border: 1px solid #fff;
+    margin-bottom: 20px;
+}
+
+.itemImage{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Character page */
+
+/* Game Page */
+#phaserGame {
+    height: 100vh;
+    background-color: black;
+}
+
+/* Game Page */
 
 
 /* Volledige navbar weergeven */

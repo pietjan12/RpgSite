@@ -33,5 +33,10 @@ namespace rpgsite3.Controllers
 
             return View(model);
         }
+
+        public IActionResult Game()
+        {
+            return View();
+        }
     }
 }

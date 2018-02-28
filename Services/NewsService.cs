@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Data.Models;
-using Data.Interfaces;
+using Api.Models;
+using Api.Interfaces;
 
 namespace Services
 {

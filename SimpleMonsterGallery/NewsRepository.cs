@@ -1,27 +1,20 @@
-﻿using Data.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using Data.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
+using Data.Base;
+using Api.Interfaces;
+using Api.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Data
 {
-    public class NewsRepository : INews
+    public class NewsRepository : BaseRepo, INews
     {
-        private string connectionString;
-
-        public NewsRepository()
+        public NewsRepository(IConfiguration config) : base(config)
         {
-            //Nog omzetten naar app.json centrale connection string.
-            connectionString = @"Server=localhost;Uid=root;Database=rpgsite;Pwd=;";
-        }
-
-        private MySqlConnection OpenConnection()
-        {
-            return new MySqlConnection(connectionString);
         }
 
         public IEnumerable<News> GetAll()

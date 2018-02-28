@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Data.Models
+namespace Api.Models
 {
     public class Monster
     {

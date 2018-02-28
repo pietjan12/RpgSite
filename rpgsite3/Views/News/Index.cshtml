@@ -1,17 +1,55 @@
 ﻿@model rpgsite3.Models.NewsModel
 
-
-<section class="news-primary text-center">
-    <div class="container container-narrow newsplace  animate slide-left">
-        <div class="row">
-            <div class="col-sm-12 headercolor">
-                <h1 class="articlehead">@Model.News.First().Title</h1>
-                <p class="authortext">@Model.News.First().Author - @Model.News.First().PostDate.ToString("dd/MM/yyyy")</p>
-                <div class="img-wrapper">
-                    <img src="/@Model.News.First().Img_Loc" class="fullimg">
-                </div>
-                <p class="articletext">@Model.News.First().Text</p>
-            </div>
+<!-- carousel -->
+<div id="img-slider" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#img-slider" data-slide-to="0" class="active"></li>
+        <li data-target="#img-slider" data-slide-to="1"></li>
+        <li data-target="#img-slider" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+        <div class="carousel-item active">
+            <div class="bg-img-1"></div>
         </div>
+        <div class="carousel-item">
+            <div class="bg-img-2"></div>
+        </div>
+        <div class="carousel-item">
+            <div class="bg-img-3"></div>
+        </div>
+    </div>
+</div>
+<!-- carousel -->
+
+<section class="bg-primary text-center" id="newsFull">
+    <div class="container container-narrow">
+        <div class="row">
+            <h1 class="news-heading col-sm-12">News</h1>
+        </div>
+
+        @foreach( var news in Model.News)
+        {
+            @: <div class='row news-item animate slide-left'>
+                <div class='col-md-6 nopadding'>
+                    <div class='bg-fullnews' style='background-image: url(@news.Img_Loc)'></div>
+                    <div class='overlay'>
+                        <a href="news/@news.Id"></a>
+                    </div>
+                </div>
+                <div class='col-md-6 nopadding'>
+                    <a href="news/@news.Id">
+                        <div class='news-wrapper'>
+                            <div class='fullnewstext'>
+                                <h5>@news.Title</h5>
+                                <div class='d-none d-md-block'>
+                                    <p class='smalltext'>@news.Text"...</p>
+                                    <h6>Read More</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @:</div>
+        }
     </div>
 </section>

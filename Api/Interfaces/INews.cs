@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Data.Models;
+using Api.Models;
 
-namespace Data.Interfaces
+namespace Api.Interfaces
 {
     public interface INews
     {
