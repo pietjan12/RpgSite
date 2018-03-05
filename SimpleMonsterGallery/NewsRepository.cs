@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using Dapper;
 using MySql.Data.MySqlClient;
 using Data.Base;
 using Api.Interfaces;
 using Api.Models;
 using Microsoft.Extensions.Configuration;
+using Dapper;
 
 namespace Data
 {
@@ -22,7 +22,11 @@ namespace Data
             using (IDbConnection db = OpenConnection())
             {
                 string sQuery = "GetAllNews";
-                return db.Query<News>(sQuery, commandType: CommandType.StoredProcedure).AsList();
+
+                var list = db.Query<News, Gebruiker, News>(sQuery, (news, gebruiker) => { news.user = gebruiker; return news; },splitOn: "user_id", commandType: CommandType.StoredProcedure).AsList();
+
+                return list;
+               
             }
         }
 
@@ -31,7 +35,7 @@ namespace Data
             using (IDbConnection db = OpenConnection())
             {
                 string sQuery = "FindNews";
-                return db.Query<News>(sQuery, new { newsid = id }, commandType: CommandType.StoredProcedure).AsList();
+                return db.Query<News, Gebruiker, News>(sQuery, (news, gebruiker) => { news.user = gebruiker; return news; }, new { newsid = id }, splitOn: "user_id", commandType: CommandType.StoredProcedure).AsList();
             }
         }
     }
