@@ -12,7 +12,7 @@ namespace Data.Base
         private readonly IConfiguration config;
         private readonly String connectionString;
 
-        public BaseRepo(IConfiguration config)
+        protected BaseRepo(IConfiguration config)
         {
             //Config en connectiestring
             this.config = config;
@@ -20,7 +20,7 @@ namespace Data.Base
             this.connectionString = config["Data:TestConnection"];
         }
 
-        public SqlConnection OpenConnection()
+        protected SqlConnection OpenConnection()
         {
             return new SqlConnection(connectionString);
         }

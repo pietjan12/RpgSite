@@ -34,6 +34,9 @@ namespace rpgsite3
             //Enemy list services
             services.AddScoped<iEnemyService, EnemyService>();
             services.AddTransient<IEnemies, MonsterGalleryRepository>();
+            //Character services
+            services.AddScoped<ICharacterService, CharacterService>();
+            services.AddTransient<ICharacter, CharacterRepository>();
            
             services.AddMvc();
         }
