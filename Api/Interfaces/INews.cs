@@ -10,5 +10,7 @@ namespace Api.Interfaces
         IEnumerable<News> GetAll();
         IEnumerable<News> GetByID(int id);
 
+        bool CreateArticle(String Title, String text, String img_loc, string username);
+        bool EditArticle(int id, String Title, String text, String img_loc);
     }
 }

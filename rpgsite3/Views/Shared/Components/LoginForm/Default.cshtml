@@ -1,0 +1,26 @@
+﻿@model rpgsite3.Models.ValidationModels.LoginModel
+
+<div class="modal fade" id="login-modal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content loginmodal-container">
+            <div class="modal-header">
+                <h5 class="modal-title">Login</h5>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Account" asp-action="Login" data-ajax="true" data-ajax-method="POST" data-ajax-begin="OnStartAjax" data-ajax-failure="OnLoginFailed" data-ajax-success="OnLoginSuccess">
+                    <div class="errormessage"></div>
+                    <input type="text" name="username" asp-for="username" placeholder="Username">
+                    <span asp-validation-for="username"></span>
+                    <input type="password" name="password" asp-for="password" placeholder="Password">
+                    <span asp-validation-for="password"></span>
+                    <input type="submit" class="login loginmodal-submit" value="Login">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="login-help">
+                    <a href="#register-modal" data-dismiss="modal" data-toggle="modal">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

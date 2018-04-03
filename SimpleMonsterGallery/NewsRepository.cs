@@ -8,6 +8,7 @@ using Api.Interfaces;
 using Api.Models;
 using Microsoft.Extensions.Configuration;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 
 namespace Data
 {
@@ -15,6 +16,38 @@ namespace Data
     {
         public NewsRepository(IConfiguration config) : base(config)
         {
+           
+        }
+
+        public bool CreateArticle(string Title, string text, string img_loc, string username)
+        {
+            using (IDbConnection db = OpenConnection())
+            {
+                string sQuery = "CreateArticle";
+                var changedrows = db.Execute(sQuery, new { nieuwstitel = Title, nieuwstext = text, imglocatie = img_loc, username }, commandType: CommandType.StoredProcedure);
+
+                if(changedrows > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public bool EditArticle(int id, string title, string text, string img_loc)
+        {
+            using (IDbConnection db = OpenConnection())
+            {
+                string sQuery = "EditArticle";
+
+                var changedrows = db.Execute(sQuery, new { id, nieuwstitel = title, nieuwstext = text, imglocatie = img_loc }, commandType: CommandType.StoredProcedure);
+
+                if (changedrows > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
         }
 
         public IEnumerable<News> GetAll()
@@ -26,7 +59,6 @@ namespace Data
                 var list = db.Query<News, Gebruiker, News>(sQuery, (news, gebruiker) => { news.user = gebruiker; return news; },splitOn: "user_id", commandType: CommandType.StoredProcedure).AsList();
 
                 return list;
-               
             }
         }
 

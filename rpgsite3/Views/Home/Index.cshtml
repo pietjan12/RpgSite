@@ -22,7 +22,7 @@
         <div class="col-sm col-lg-6 col-sm-8 nopadding">
             <a href="news/@Model.News[0].Id">
                 <div class="news-item animate slide-left">
-                    
+
                     <div class='bg-shadowed' style='background-image: url(@Model.News[0].Img_Loc)'>
                     </div>
                     <div class="overlay">
@@ -87,7 +87,7 @@
                                 <a href="news/@news.Id">@news.Title</a>
                                 <p>@news.PostDate.ToString("dd/MM/yyyy")</p>
                             </div>
-                        @:</li>
+                            @:</li>
                     }
                 </ul>
             </div>
@@ -95,3 +95,20 @@
     </div>
     <!-- nieuws gedeelte -->
 </section>
+
+@section Scripts{
+    @{
+        if (!User.Identity.IsAuthenticated)
+        {
+            var get = Context.Request.Query["ReturnUrl"].ToString();
+            if (get != "")
+            {
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $("#login-modal").modal()
+                    });
+                </script>
+            }
+        }
+    }
+}

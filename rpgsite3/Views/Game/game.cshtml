@@ -1,7 +1,81 @@
-﻿<!-- phaser scripts inladen -->
+﻿@{ 
+    Layout = null;
+}
+<html>
+<head>
+<link rel="stylesheet" href="~/css/style.css" />
+<!-- phaser scripts inladen -->
 <script type="text/javascript" src="~/lib/Phaser/phaser.js"></script>
+<script type="text/javascript" src="~/lib/Phaser/phaser-tiled.js"></script>
+</head>
+<body class="NoPadding" id="gamebody">
+    <!-- Game DIV -->
+    <div id="phaserGame">
 
-<div id="phaserGame">
 
-</div>
-<script src="~/Game Scripts/game.js"></script>
+        <!-- UI DIVS -->
+        <div id="overlay">
+            <div id="MainMenu" class="hidden">
+                <a id="play" class="gamebtn" asp-action="GetCharacters" asp-controller="Character" data-ajax="true" data-ajax-method="POST" data-ajax-success="OnGetCharacters">Play</a>
+                <a id="optionsbtn" class="gamebtn">Options</a>
+                <a id="quitmenu" class="gamebtn" asp-action="Index" asp-controller="Home">Quit</a>
+                <div id="CharacterMenu" class="hidden">
+                </div>
+                <div id="Options" class="hidden">
+                    <div class="gameh1">Options</div>
+                    <div class="gameh2">Display</div>
+                    <button id="fullscreentoggle" class="gamebtn">Fullscreen</button>
+                    <div class="gameh2">Sound</div>
+                    <button id="mutebtn" class="gamebtn">Mute</button>
+                    <div id="backfromoptions" class="gamebtn">Back</div>
+                </div>
+                <div id="inventory" class="hidden">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive-master/dist/jquery.unobtrusive-ajax.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/Game Scripts/RpgGame.js"></script>
+    <script src="~/js/GameCalls.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //Popover toevoegen voor dynamisch gecreerde elementen
+            var popOverSettings = {
+                placement: 'bottom',
+                container: '#inventory',
+                html: true,
+                selector: '[data-toggle="popover"]',
+                content: function () {
+                    return $(this).next(".hoverinfo").children(".popover-body").html();
+                },
+                title: function () {
+                    return $(this).next(".hoverinfo").children(".popover-heading").html();
+                },
+                trigger: "hover click"
+            }
+
+            $('body').popover(popOverSettings);
+
+            //Alle anderen popovers verbergen
+            $('body').on('click', '.iteminfo', function () {
+                $('.iteminfo').not(this).popover('hide');
+            });
+
+            /* $('[data-toggle="popover"]').on('click', function (e) {
+                $('[data-toggle="popover"]').not(this).popover('hide');
+            });
+
+            $('[data-toggle="popover"]').on('hover', function (e) {
+                $('[data-toggle="popover"]').not(this).popover('hide');
+            }); */
+        });
+    </script>
+</body>
+</html>

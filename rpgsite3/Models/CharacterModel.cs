@@ -8,6 +8,7 @@ namespace rpgsite3.Models
 {
     public class CharacterModel
     {
-        public Character character;
+        public Character character { get; set; }
+        public List<Character> foundCharacters { get; set; }
     }
 }

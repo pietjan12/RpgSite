@@ -1,0 +1,21 @@
+﻿@model rpgsite3.Models.CharacterModel
+
+@if (Model != null && Model.foundCharacters != null && Model.foundCharacters.Count > 0)
+{
+    @foreach (var item in Model.foundCharacters)
+    {
+        @:<div class="characteroverlay">
+            <a class="ChooseCharacterBtn" asp-action="GetInventory" asp-controller="Character" data-ajax="true" data-ajax-method="POST" data-ajax-success="OnGetInventory" asp-route-charactername="@item.naam">
+                <div class="gamecharacter">
+                    <div class="charactername">@item.naam</div>
+                    <div class="characterlevel">@item.level</div>
+                </div>
+            </a>
+        @:</div>
+    }
+    @if (Model.foundCharacters.Count < 8)
+    {
+        @:<button id="createcharacter" class="gamebtn">Create Character</button>
+    }
+    <button id="backtomenu" class="gamebtn">Back</button>
+}

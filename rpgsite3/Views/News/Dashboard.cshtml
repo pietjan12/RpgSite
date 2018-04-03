@@ -1,0 +1,31 @@
+﻿@model rpgsite3.Models.NewsModel
+
+<section class="bg-primary text-center" id="newsFull">
+    <div class="container container-narrow">
+        <a asp-action="AddArticle" asp-controller="News" class="btn btn-primary newarticle">Nieuw artikel</a>
+        @foreach (var news in Model.News)
+        {
+        @: <div class='row news-item animate slide-left'>
+            <div class='col-md-6 nopadding'>
+                <div class='bg-fullnews' style='background-image: url(/@news.Img_Loc)'></div>
+                <div class='overlay'>
+                    <a asp-action="AddArticle" asp-controller="News" asp-route-id="@news.Id"></a>
+                </div>
+            </div>
+            <div class='col-md-6 nopadding'>
+                <a asp-action="AddArticle" asp-controller="News" asp-route-id="@news.Id">
+                    <div class='news-wrapper'>
+                        <div class='fullnewstext'>
+                            <h5>@news.Title</h5>
+                            <div class='d-none d-md-block'>
+                                <p class='smalltext'>@news.Text"...</p>
+                                <h6>Read More</h6>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @:</div>
+        }
+    </div>
+</section>

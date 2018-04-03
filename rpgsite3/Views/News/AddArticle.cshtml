@@ -1,0 +1,48 @@
+﻿@model rpgsite3.Models.NewsModel
+
+
+<div class="fillpage bg-primary">
+    <div class="newscreate">
+
+        @if (Model != null)
+        {
+            <form asp-controller="News" asp-action="EditArticle" enctype="multipart/form-data">
+                <div class="form-group row">
+                    <div class="errormessage">Er ging iets mis.</div>
+                </div>
+                <div class="form-group row">
+                    <input type="file" name="file" class="form-control" value="@Model.News.First().Img_Loc"/>
+                </div>
+                <div class="form-group row">
+                    <input type="text" class="form-control" name="title"  value="@Model.News.First().Title">
+                </div>
+                <div class="form-group row">
+                    <textarea name="text" class="form-control">@Model.News.First().Text</textarea>
+                </div>
+                <input type="number" class="form-control hidden" name="id" value="@Model.News.First().Id"/>
+
+                <input type="submit" class="btn btn-primary" value="Aanpassen">
+                <a asp-action="Dashboard" asp-controller="News" class="btn btn-primary">Annuleren</a>
+            </form>
+        }
+        else
+        {
+            <form asp-controller="News" asp-action="CreateArticle" enctype="multipart/form-data">
+                <div class="form-group row">
+                    <div class="errormessage">Er ging iets mis.</div>
+                </div>
+                <div class="form-group row">
+                    <input type="file" name="file" class="form-control" />
+                </div>
+                <div class="form-group row">
+                    <input type="text" class="form-control" name="title" placeholder="News Title">
+                </div>
+                <div class="form-group row">
+                    <textarea name="text" class="form-control" placeholder="Body Text"></textarea>
+                </div>
+                <input type="submit" class="btn btn-primary" value="Aanmaken">
+                <a asp-action="Dashboard" asp-controller="News" class="btn btn-primary">Annuleren</a>
+            </form>
+        }
+    </div>
+</div>

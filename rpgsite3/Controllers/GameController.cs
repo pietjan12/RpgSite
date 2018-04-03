@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using rpgsite3.Models;
 using Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace rpgsite3.Controllers
 {
@@ -33,9 +34,10 @@ namespace rpgsite3.Controllers
 
             return View(model);
         }
-
+        [Authorize]
         public IActionResult Game()
         {
+            ViewData["bodyclass"] = "NoPadding";
             return View();
         }
     }

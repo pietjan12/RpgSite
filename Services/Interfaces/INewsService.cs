@@ -9,5 +9,9 @@ namespace Services.Interfaces
     {
         IEnumerable<News> GetAllNews();
         IEnumerable<News> FindNewsById(int id);
+
+        bool CreateArticle(String title, String text, String img_loc);
+
+        bool EditArticle(int id, String title, String text, String img_loc);
     }
 }

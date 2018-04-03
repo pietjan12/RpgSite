@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - rpgsite3</title>
 
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/style.css" />
-        <link rel="stylesheet" href="~/lib/font-awesome/fontawesome-all.min.css"/>
-       
-    </environment>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/fontawesome-all.min.css" />
+    <!-- Ajax Call Script moet bovenin. Anders kan unobtrusive ajax de methods niet vinden. Dont shoot the messenger ¯\_(ツ)_/¯ -->
 </head>
 <body class="@ViewData["bodyclass"]">
 
@@ -26,8 +25,29 @@
                     <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a class="nav-link" asp-area="" asp-controller="News" asp-action="Index">News</a></li>
                     <li><a class="nav-link" asp-area="" asp-controller="Game" asp-action="Index">About</a></li>
-                    <li><a class="nav-link" asp-area="" asp-controller="Game" asp-action="Game">Game</a></li>
                     <li><a class="nav-link" asp-area="" asp-controller="Character" asp-action="Index">Character</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a class="nav-link" asp-area="" asp-controller="Game" asp-action="Game">Game</a></li>
+                        var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
+                        if (claimsIdentity != null)
+                        {
+                            var c = claimsIdentity.FindFirst("Admin");
+                            if (c != null)
+                            {
+                                //Controleren of gebruiker een admin is, indien true, dashboard link weergeven.
+                                if (Convert.ToBoolean(c.Value))
+                                {
+                                    <li><a class="nav-link" asp-area="" asp-controller="News" asp-action="Dashboard">Dashboard</a></li>
+                                }
+                            }
+                        }
+                        <li><a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout" data-ajax="true" data-ajax-method="POST" data-ajax-success="OnLogOutSuccess">Logout</a></li>
+                    }
+                    else
+                    {
+                        <li><a class="nav-link" href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -41,7 +61,10 @@
                     <img src="~/images/logocompany.png" width="100" height="50">
                     <p class="footer-links">
                         <a asp-action="index" asp-controller="home">Home</a>
+                        <a asp-action="Index" asp-controller="News">News</a>
+                        <a asp-action="Index" asp-controller="Game">About</a>
                         <a asp-action="Game" asp-controller="home">Game</a>
+                        <a asp-action="Index" asp-controller="Character">Character</a>
                     </p>
                     <p class="footer-company-name">Generic Company &copy; 2018</p>
                 </div>
@@ -75,12 +98,22 @@
                 </div>
             </div>
         </footer>
+
+        @await Component.InvokeAsync("LoginForm")
+        @await Component.InvokeAsync("RegisterForm")
+
     </div>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/jquery-ajax-unobtrusive-master/dist/jquery.unobtrusive-ajax.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/script.js"></script>
+        <script src="~/js/ajaxcalls.js"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -89,12 +122,17 @@
                 crossorigin="anonymous"
                 integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
         </script>
+        <script src="~/lib/jquery-ajax-unobtrusive-master/dist/jquery.unobtrusive-ajax.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
+        <script src="~/js/script.js"></script>
     </environment>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

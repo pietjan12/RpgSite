@@ -7,7 +7,7 @@ namespace Services.Interfaces
 {
     public interface ICharacterService
     {
-        Character FindMyCharacters(int userid);
+        List<Character> FindMyCharacters(string username);
         Character FindCharacterByName(String name);
     }
 }

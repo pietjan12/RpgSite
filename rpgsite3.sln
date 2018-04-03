@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "SimpleMonsterGaller
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{4F637494-3FDE-4106-9175-5FAA6F2B4993}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{1C20A05B-6981-48B8-9A07-C2FC0460CB90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{1C20A05B-6981-48B8-9A07-C2FC0460CB90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

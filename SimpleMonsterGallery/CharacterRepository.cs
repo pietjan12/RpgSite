@@ -25,22 +25,25 @@ namespace Data
                 string sQuery = "TestGetCharacter";
                 var results = db.QueryMultiple(sQuery, new { CharacterName = naam }, commandType: CommandType.StoredProcedure);
 
-                Character character = results.Read<Character>().Distinct().First();
-                character.inventory = results.Read<Item>().Distinct().ToList();
-                character.skills = results.Read<Skill>().Distinct().ToList();
-
+                Character character = results.Read<Character>().Distinct().FirstOrDefault();
+                if (character != null)
+                {
+                    character.inventory = results.Read<Item>().Distinct().ToList();
+                    character.skills = results.Read<Skill>().Distinct().ToList();
+                }
                 return character;
             }
         }
 
-        /* TODO FIND MY CHARACTERS */
-        public Character FindMyCharacters(int user_ID)
+        public List<Character> FindMyCharacters(string username)
         {
             using (IDbConnection db = OpenConnection())
             {
-                string sQuery = "GetMyCharacter";
-                return null;
-                //return db.Query<Character, Item, Character>(sQuery, (character,item) => { character.inventory.Add(item); return character; }, new { userid = user_ID }, splitOn: "user_id", commandType: CommandType.StoredProcedure).AsList();
+                string sQuery = "GetMyCharacters";
+                
+                List<Character> characters = db.Query<Character>(sQuery, new { gebruiker = username },commandType: CommandType.StoredProcedure).AsList();
+
+                return characters;
             }
         }
             

@@ -7,7 +7,7 @@ namespace Api.Interfaces
 {
     public interface ICharacter
     {
-        Character FindMyCharacters(int user_ID);
+        List<Character> FindMyCharacters(string username);
         Character FindCharacterByName(String naam);
     }
 }

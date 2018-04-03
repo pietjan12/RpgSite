@@ -10,6 +10,7 @@ namespace Api.Models
         public string naam { get; set; }
         public int strength { get; set; }
         public int intelligence { get; set; }
+        public int level { get; set; }
         public List<Item> inventory { get; set; }
         public List<Skill> skills { get; set; }
     }

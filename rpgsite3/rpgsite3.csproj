@@ -2,14 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="wwwroot\Game Scripts\game.ts" />
+    <Content Remove="wwwroot\Game Scripts\GameState.ts" />
+    <Content Remove="wwwroot\Game Scripts\InventorySystem.ts" />
+    <Content Remove="wwwroot\Game Scripts\Item.ts" />
+    <Content Remove="wwwroot\Game Scripts\MainMenu.ts" />
+    <Content Remove="wwwroot\Game Scripts\Player.ts" />
+    <Content Remove="wwwroot\lib\jquery\jquery.d.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
   </ItemGroup>
 
@@ -18,8 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Account\" />
     <Folder Include="wwwroot\images\items\" />
-    <Folder Include="wwwroot\Media\" />
+    <Folder Include="wwwroot\images\NewsImages\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +38,28 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\Game Scripts\game.ts" />
+    <TypeScriptCompile Include="wwwroot\Game Scripts\GameState.ts" />
+    <TypeScriptCompile Include="wwwroot\Game Scripts\InventorySystem.ts" />
+    <TypeScriptCompile Include="wwwroot\Game Scripts\Item.ts" />
+    <TypeScriptCompile Include="wwwroot\Game Scripts\MainMenu.ts" />
+    <TypeScriptCompile Include="wwwroot\Game Scripts\Player.ts" />
+    <TypeScriptCompile Include="wwwroot\lib\jquery\jquery.d.ts" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile>wwwroot/Game Scripts/RpgGame.js</TypeScriptOutFile>
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
 
 </Project>

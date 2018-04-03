@@ -1,0 +1,33 @@
+﻿@model rpgsite3.Models.CharacterModel
+
+@{
+    Layout = null;
+}
+
+
+@if (Model != null && Model.character != null)
+{
+    @:<div id="inventorywrapper">
+        //Door Alle items heen loopen
+        foreach (var item in Model.character.inventory)
+        {
+
+            @:<div class="square">
+                <img src="~/images/items/@item.img_loc" class="itemImage" />
+                <a href="#" class="iteminfo" data-toggle="popover" data-placement="left" data-popover-content=".hoverinfo"></a>
+                <div class="hoverinfo hidden">
+                    <div class="popover-heading">
+                        <img class="itemimg" src="~/images/items/@item.img_loc" />
+                    </div>
+
+                    <div class="popover-body">
+                        <div class="itemName">@item.name</div>
+                        <div class="stat">Level : @item.level</div>
+                        <div class="stat">Damage : @item.damage</div>
+                        <div class="itemdescription">@item.description</div>
+                    </div>
+                </div>
+                @:</div>
+        }
+        @:</div>
+}
