@@ -56,9 +56,7 @@ namespace Data
             {
                 string sQuery = "GetAllNews";
 
-                var list = db.Query<News, Gebruiker, News>(sQuery, (news, gebruiker) => { news.user = gebruiker; return news; },splitOn: "user_id", commandType: CommandType.StoredProcedure).AsList();
-
-                return list;
+                return db.Query<News>(sQuery, commandType: CommandType.StoredProcedure).AsList();
             }
         }
 
@@ -67,7 +65,7 @@ namespace Data
             using (IDbConnection db = OpenConnection())
             {
                 string sQuery = "FindNews";
-                return db.Query<News, Gebruiker, News>(sQuery, (news, gebruiker) => { news.user = gebruiker; return news; }, new { newsid = id }, splitOn: "user_id", commandType: CommandType.StoredProcedure).AsList();
+                return db.Query<News>(sQuery, new { newsid = id }, commandType: CommandType.StoredProcedure).AsList();
             }
         }
     }

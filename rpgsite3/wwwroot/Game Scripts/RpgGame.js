@@ -155,6 +155,7 @@ var RpgGame;
 })(RpgGame || (RpgGame = {}));
 var RpgGame;
 (function (RpgGame) {
+    //<summary>Deze klassen gaat over de overgang van interactie met de inventory/equipment dom elementen en de phaser game variabelen.<summary>
     var InventorySystem = /** @class */ (function () {
         function InventorySystem() {
             this.ListenForKey = document.onkeydown;

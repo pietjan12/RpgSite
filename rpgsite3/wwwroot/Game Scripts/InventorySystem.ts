@@ -1,5 +1,6 @@
 ﻿module RpgGame {
 
+    //<summary>Deze klassen gaat over de overgang van interactie met de inventory/equipment dom elementen en de phaser game variabelen.<summary>
     export class InventorySystem {
         private InventoryWrapper: HTMLElement;
         //Nodelist van alle inventory slots
