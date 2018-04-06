@@ -157,8 +157,6 @@ var RpgGame;
 (function (RpgGame) {
     var InventorySystem = /** @class */ (function () {
         function InventorySystem() {
-            //Array van items
-            this.bag = [];
             this.ListenForKey = document.onkeydown;
         }
         InventorySystem.prototype.FillInventory = function () {
@@ -220,11 +218,27 @@ var RpgGame;
             }
             this.HideContextMenu();
         };
-        InventorySystem.prototype.GetInventory = function () {
-            return this.bag;
-        };
         InventorySystem.prototype.EquipItem = function (item) {
-            console.log("equip item");
+            if (item.equipped === true) {
+                if (this.TempInt !== undefined && this.TempStrength !== undefined) {
+                    console.log("Oude Stats Verwijderen");
+                    RpgGame.speler.SetStrength(RpgGame.speler.GetStrength() - this.TempStrength);
+                    RpgGame.speler.SetIntelligence(RpgGame.speler.GetIntelligence() - this.TempInt);
+                }
+                //Temp variables updaten
+                this.TempInt = item.intelligence;
+                this.TempStrength = item.strength;
+                //item is geequiped in inventory, stats verhogen.
+                RpgGame.speler.SetStrength(RpgGame.speler.GetStrength() + item.strength);
+                RpgGame.speler.SetIntelligence(RpgGame.speler.GetIntelligence() + item.intelligence);
+            }
+            else {
+                //item is geunequiped in equipment scherm, stats verlagen.
+                RpgGame.speler.SetStrength(RpgGame.speler.GetStrength() - item.strength);
+                RpgGame.speler.SetIntelligence(RpgGame.speler.GetIntelligence() - item.intelligence);
+            }
+            console.log("str : " + RpgGame.speler.GetStrength());
+            console.log("int : " + RpgGame.speler.GetIntelligence());
         };
         InventorySystem.prototype.UseItem = function (item) {
             console.log("use item");
@@ -419,6 +433,9 @@ var RpgGame;
             //this.currentState = playerStates.ALIVE;
             //this.isHitting = false;
             _this.inventory = new RpgGame.InventorySystem();
+            //base values
+            _this.strength = 10;
+            _this.intelligence = 10;
             //Sprite control
             _this.anchor.setTo(0.5, 0.5);
             _this.scale.set(2);
@@ -431,11 +448,23 @@ var RpgGame;
         Player.prototype.GetInventory = function () {
             return this.inventory;
         };
+        Player.prototype.GetStrength = function () {
+            return this.strength;
+        };
+        Player.prototype.GetIntelligence = function () {
+            return this.intelligence;
+        };
         Player.prototype.SetName = function (name) {
             this.playername = name;
         };
         Player.prototype.SetLevel = function (level) {
             this.level = level;
+        };
+        Player.prototype.SetStrength = function (strength) {
+            this.strength = strength;
+        };
+        Player.prototype.SetIntelligence = function (intelligence) {
+            this.intelligence = intelligence;
         };
         Player.prototype.update = function () {
             this.body.velocity.x = 0;

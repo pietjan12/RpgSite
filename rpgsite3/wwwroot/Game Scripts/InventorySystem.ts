@@ -5,8 +5,8 @@
         //Nodelist van alle inventory slots
         private inventorySlots: NodeListOf<Element>;
         private ContextMenu: HTMLElement;
-        //Array van items
-        private bag: Item[] = [];
+        private TempInt: number;
+        private TempStrength: number;
 
         constructor() {
             this.ListenForKey = document.onkeydown;
@@ -84,12 +84,31 @@
             this.HideContextMenu();
         }
 
-        public GetInventory(): Item[] {
-            return this.bag;
-        }
-
         public EquipItem(item) {
-            console.log("equip item");
+
+            if (item.equipped === true) {
+                if (this.TempInt !== undefined && this.TempStrength !== undefined) {
+                    console.log("Oude Stats Verwijderen");
+                    speler.SetStrength(speler.GetStrength() - this.TempStrength);
+                    speler.SetIntelligence(speler.GetIntelligence() - this.TempInt);
+                }
+                //Temp variables updaten
+                this.TempInt = item.intelligence;
+                this.TempStrength = item.strength;
+
+                //item is geequiped in inventory, stats verhogen.
+                speler.SetStrength(speler.GetStrength() + item.strength);
+                speler.SetIntelligence(speler.GetIntelligence() + item.intelligence);
+            } else {
+                //item is geunequiped in equipment scherm, stats verlagen.
+                speler.SetStrength(speler.GetStrength() - item.strength);
+                speler.SetIntelligence(speler.GetIntelligence() - item.intelligence);
+            }
+
+            
+            console.log("str : " + speler.GetStrength());
+            console.log("int : " + speler.GetIntelligence());
+            
         }
 
         public UseItem(item) {

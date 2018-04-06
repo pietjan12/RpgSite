@@ -108,7 +108,7 @@ namespace rpgsite3.Controllers
         public IActionResult use(Item test)
         {
             bool used = _CharacterService.UseItem(test);
-            return Json(used);
+            return Json(test);
         }
 
         [HttpPost]
@@ -116,7 +116,7 @@ namespace rpgsite3.Controllers
         {
             _CharacterService.EquipItem(test);
 
-            return Json(test.equipped);
+            return Json(test);
         }
 
         [HttpPost]

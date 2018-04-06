@@ -18,6 +18,8 @@ module RpgGame {
     export class Player extends Phaser.Sprite {
         private playername: string;
         private level: number;
+        private strength: number;
+        private intelligence: number;
         //inventory
         private inventory: InventorySystem;
 
@@ -50,6 +52,9 @@ module RpgGame {
             //this.isHitting = false;
 
             this.inventory = new InventorySystem();
+            //base values
+            this.strength = 10;
+            this.intelligence = 10;
 
             //Sprite control
             this.anchor.setTo(0.5, 0.5);
@@ -67,12 +72,28 @@ module RpgGame {
             return this.inventory;
         }
 
+        public GetStrength() {
+            return this.strength;
+        }
+
+        public GetIntelligence() {
+            return this.intelligence;
+        }
+
         public SetName(name) {
             this.playername = name;
         }
 
         public SetLevel(level) {
             this.level = level;
+        }
+
+        public SetStrength(strength) {
+            this.strength = strength;
+        }
+
+        public SetIntelligence(intelligence) {
+            this.intelligence = intelligence;
         }
 
         update() {

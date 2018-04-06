@@ -85,7 +85,7 @@ namespace Data
             using (IDbConnection db = OpenConnection())
             {
                 string sQuery = "EquipItem";
-                var changedRows = db.Execute(sQuery, new { id = item.id, equip = !item.equipped }, commandType: CommandType.StoredProcedure);
+                var changedRows = db.Execute(sQuery, new { id = item.id, equip = !item.equipped, item.category }, commandType: CommandType.StoredProcedure);
 
                 if (changedRows > 0)
                 {
