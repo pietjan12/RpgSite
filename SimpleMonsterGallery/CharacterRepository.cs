@@ -30,7 +30,14 @@ namespace Data
                 {
                     character.inventory = results.Read<Item>().Distinct().ToList();
                     character.skills = results.Read<Skill>().Distinct().ToList();
+
+                    //Alle item acties opvragen
+                    string sQuery2 = "GetActions";
+                    foreach (Item item in character.inventory) {
+                        item.actions = db.Query<String>(sQuery2, new { categoryid = item.category }, commandType: CommandType.StoredProcedure).ToList();
+                    }
                 }
+
                 return character;
             }
         }
@@ -46,6 +53,46 @@ namespace Data
                 return characters;
             }
         }
-            
+
+        /* GAME PARAMETERS */
+        public bool UseItem(Item item)
+        {
+            //Item verwijderen van speler
+            using (IDbConnection db = OpenConnection())
+            {
+                string sQuery = "RemoveItem";
+                var changedRows = db.Execute(sQuery, new { id = item.id }, commandType: CommandType.StoredProcedure);
+
+                if(changedRows > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool DropItem(Item item)
+        {
+            using (IDbConnection db = OpenConnection())
+            {
+                
+            }
+            return true;
+        }
+
+        public bool EquipItem(Item item)
+        {
+            using (IDbConnection db = OpenConnection())
+            {
+                string sQuery = "EquipItem";
+                var changedRows = db.Execute(sQuery, new { id = item.id, equip = !item.equipped }, commandType: CommandType.StoredProcedure);
+
+                if (changedRows > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

@@ -17,6 +17,7 @@ function OnGetCharacters(data) {
     hideMainMenu();
 
     var charactermenu = $("#MainMenu").find('#CharacterMenu');
+    charactermenu.empty();
     charactermenu.prepend(data);
     charactermenu.removeClass("hidden");
 };
@@ -26,10 +27,48 @@ function OnGetInventory(data) {
 
     //Inventory laten zien
     var inventorymenu = $("#MainMenu").find('#inventory');
+    inventorymenu.empty();
     inventorymenu.prepend(data);
 
+    //Speler inventory updaten
+    window.player.inventory.FillInventory();
+}
 
-    
+function onEquipSuccess(data) {
+    //item weghalen uit inventory en toevoegen aan equipment
+    console.log("Item Equip Status : " + data);
+
+    window.player.inventory.EquipItem(data);
+    refreshInventory();
+}
+
+function onUseSuccess(data) {
+    console.log("Used Item : " + data);
+    //item verwijderen uit html en effect toepassen ?? kijken hoe dit werkt
+
+    window.player.inventory.UseItem(data);
+    refreshInventory();
+}
+
+function onDropSuccess(data) {
+    console.log("Dropped Item : " + data);
+    //item verwijderen uit inventory
+
+    window.player.inventory.RemoveItem(data);
+    refreshInventory();
+}
+
+function refreshInventory() {
+    var characterName = $("#inventory").find(".gameh1").text().split(" - ")[1];
+
+     $.ajax({
+        url: "../Character/GetInventory",
+        type: "POST",
+        data: { charactername : characterName },
+        success: function (data) {
+            OnGetInventory(data);
+        }
+    }); 
 }
 
 

@@ -12,6 +12,7 @@
     <Content Remove="wwwroot\Game Scripts\Item.ts" />
     <Content Remove="wwwroot\Game Scripts\MainMenu.ts" />
     <Content Remove="wwwroot\Game Scripts\Player.ts" />
+    <Content Remove="wwwroot\Game Scripts\UiBaseState.ts" />
     <Content Remove="wwwroot\lib\jquery\jquery.d.ts" />
   </ItemGroup>
 
@@ -43,6 +44,7 @@
     <TypeScriptCompile Include="wwwroot\Game Scripts\Item.ts" />
     <TypeScriptCompile Include="wwwroot\Game Scripts\MainMenu.ts" />
     <TypeScriptCompile Include="wwwroot\Game Scripts\Player.ts" />
+    <TypeScriptCompile Include="wwwroot\Game Scripts\UiBaseState.ts" />
     <TypeScriptCompile Include="wwwroot\lib\jquery\jquery.d.ts" />
   </ItemGroup>
 

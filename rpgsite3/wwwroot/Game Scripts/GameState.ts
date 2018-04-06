@@ -1,10 +1,12 @@
 ﻿/// <reference path="../lib/Phaser/phaser.d.ts"/>
 /// <reference path="../lib/Phaser/phaser-tiled.d.ts"/>
 
+///<reference path='UiBaseState.ts' />
+
 module RpgGame {
     import Tiled = Phaser.Plugin.Tiled;
 
-    export class GameState extends Phaser.State {
+    export class GameState extends BaseUiState {
         //* Game Entities
 
         //* Game Landscape
@@ -19,12 +21,16 @@ module RpgGame {
 
 
         init() {
+            
             this._land = this._background = null;
             this._playerHealthText = null;
             this._Time = new Phaser.Time(this.game);
         }
 
         preload() {
+            //base Ui state
+            super.preload();
+
             //Phaser tiled toevoegen als plugin.
             this.add.plugin(new Tiled(this.game, this.game.stage));
 
@@ -51,11 +57,12 @@ module RpgGame {
             this._Time.desiredFps = 60;
             this._Time.fpsMax = 60;
             this._Time.fpsMin = 30;
-
-            this.input.onDown.add(this.GoFull, this);
         }
 
         create(): void {
+            //Base ui state
+            super.create();
+
             //Tilemap toevoegen
             this._land = (<any>this.game.add).tiledmap('myTiledMap');
 
@@ -66,8 +73,7 @@ module RpgGame {
             TileLayer.scale.set(2);
             TileLayer.resizeWorld();
             RoadLayer.scale.set(2);
-            RoadLayer.resizeWorld();
-
+            RoadLayer.resizeWorld()
             speler.AddToGame(this.game);
 
             speler.visible = true;
@@ -89,16 +95,6 @@ module RpgGame {
 
         shutdown() {
             this._land.destroy();
-        }
-
-        //Fullscreen Handler
-        GoFull(): void {
-            if (this.scale.isFullScreen) {
-                this.scale.stopFullScreen();
-            }
-            else {
-                this.scale.startFullScreen(false);
-            }
         }
     }
 

@@ -1,5 +1,4 @@
 ﻿@model rpgsite3.Models.CharacterModel
-
 @{
     Layout = null;
 }
@@ -7,12 +6,32 @@
 
 @if (Model != null && Model.character != null)
 {
+    <div class="gameh1">Inventory - @Model.character.naam</div>
     @:<div id="inventorywrapper">
         //Door Alle items heen loopen
-        foreach (var item in Model.character.inventory)
+    foreach (var item in Model.character.inventory)
+    {
+        if (item.equipped == false)
         {
-
-            @:<div class="square">
+            @:<div class="square gameinventoryitem">
+                <div class="context-menu hidden">
+                    <ul>
+                        @if (item.actions != null)
+                        {
+                            @foreach (var action in item.actions)
+                            {
+                                <li class="@action-btn">
+                                    @Html.ActionLink(item.equipped && action == "Equip" ? "Unequip" : action, action, "Character", item, new
+                               {
+                                   data_ajax = "true",
+                                   data_ajax_method = "POST",
+                                   data_ajax_success = "on" + action + "Success"
+                               })
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
                 <img src="~/images/items/@item.img_loc" class="itemImage" />
                 <a href="#" class="iteminfo" data-toggle="popover" data-placement="left" data-popover-content=".hoverinfo"></a>
                 <div class="hoverinfo hidden">
@@ -27,7 +46,8 @@
                         <div class="itemdescription">@item.description</div>
                     </div>
                 </div>
-                @:</div>
+            @:</div>
         }
-        @:</div>
+    }
+    @:</div>
 }

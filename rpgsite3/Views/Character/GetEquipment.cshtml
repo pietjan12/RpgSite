@@ -1,0 +1,20 @@
+﻿@model rpgsite3.Models.CharacterModel
+@{
+    Layout = null;
+}
+
+
+@if (Model != null && Model.character != null)
+{
+    //stats laten zien enzo en naam/level
+
+
+    //inventory deel
+    foreach (var item in Model.character.inventory)
+    {
+        if (item.equipped) {
+            @:<div>
+
+            @:</div>
+        }
+    }

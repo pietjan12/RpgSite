@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using rpgsite3.Models;
 using Services.Interfaces;
+using Api.Models;
 
 namespace rpgsite3.Controllers
 {
@@ -31,7 +32,7 @@ namespace rpgsite3.Controllers
                     return View(model);
                 }
             }
-            else if(User.Identity.IsAuthenticated)
+            else if (User.Identity.IsAuthenticated)
             {
                 //Er wordt momenteel niet gezocht. Alle characters van ingelogde persoon laten zien in een list.
                 //username ophalen vanuit cookie.
@@ -43,14 +44,14 @@ namespace rpgsite3.Controllers
                     //Alle characters van deze persoon in de database ophalen
                     var characters = _CharacterService.FindMyCharacters(username);
                     //Controleren of er iets in de list zit.
-                    if(characters != null && characters.Count() > 0)
+                    if (characters != null && characters.Count() > 0)
                     {
                         //Model vullen en doorgeven aan view
                         model.foundCharacters = characters;
                         return View(model);
                     }
                 }
-                
+
             }
             //Standaard lege view returnen
             return View();
@@ -96,6 +97,33 @@ namespace rpgsite3.Controllers
                 }
             }
             return null;
+        }
+
+
+        // game calls die inventory beinvloeden.
+        //TODO MAKEN
+        
+        //IN DIT GEVAL WORDT HTML.ACTIONLINK GEBRUIKT VOOR DE BUILT-IN OMZETTER VAN COMPLEXE OBJECTEN NAAR PARAMETERS. 
+        [HttpPost]
+        public IActionResult use(Item test)
+        {
+            bool used = _CharacterService.UseItem(test);
+            return Json(used);
+        }
+
+        [HttpPost]
+        public IActionResult equip(Item test)
+        {
+            _CharacterService.EquipItem(test);
+
+            return Json(test.equipped);
+        }
+
+        [HttpPost]
+        public IActionResult drop(Item test)
+        {
+            bool droppedItem = _CharacterService.DropItem(test);
+            return Json(droppedItem);
         }
     }
 }

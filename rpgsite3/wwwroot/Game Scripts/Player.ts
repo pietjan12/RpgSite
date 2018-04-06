@@ -49,6 +49,8 @@ module RpgGame {
             //this.currentState = playerStates.ALIVE;
             //this.isHitting = false;
 
+            this.inventory = new InventorySystem();
+
             //Sprite control
             this.anchor.setTo(0.5, 0.5);
             this.scale.set(2);

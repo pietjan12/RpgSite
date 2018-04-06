@@ -43,5 +43,29 @@ namespace Services
         {
             return _context.FindMyCharacters(username);
         }
+
+        /* GAME CALLS */
+        public bool DropItem(Item item)
+        {
+            return _context.DropItem(item);
+        }
+
+        public bool EquipItem(Item item)
+        {
+
+            bool ChangedEquip = _context.EquipItem(item);
+            if(ChangedEquip)
+            {
+                //Equipstatus flippen.
+                item.equipped = !item.equipped;
+                return true;
+            }
+            return false;
+        }
+
+        public bool UseItem(Item item)
+        {
+            return _context.UseItem(item);
+        }
     }
 }

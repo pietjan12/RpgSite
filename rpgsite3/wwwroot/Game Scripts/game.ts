@@ -28,7 +28,6 @@ module RpgGame {
                 aParams.transparent,
                 aParams.antialias,
                 aParams.physicsConfig);
-
             /* MAIN MENU LADEN */
             this.state.add('MainMenu', MainMenu, false);
             this.state.start('MainMenu');

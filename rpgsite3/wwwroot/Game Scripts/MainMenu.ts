@@ -1,7 +1,6 @@
-﻿/// <reference path="../lib/Phaser/phaser.d.ts"/>
+﻿    /// <reference path="../lib/Phaser/phaser.d.ts"/>
 /// <reference path="../lib/Phaser/phaser-tiled.d.ts"/>
 /// <reference path="../lib/jquery/jquery.d.ts"/>
-
 
 module RpgGame {
 
@@ -10,9 +9,9 @@ module RpgGame {
         music: Phaser.Sound;
         logo: Phaser.Sprite;
         private menuDiv: HTMLElement;
+        private characterMenuDiv: HTMLElement;
         private musicMuteBtn: HTMLElement;
         private fullscreenBtn: HTMLElement;
-        private InventoryWrapper: HTMLElement;
 
         preload() {
             //benodigde assets laden
@@ -28,7 +27,7 @@ module RpgGame {
             this.menuDiv = document.getElementById("MainMenu");
             this.musicMuteBtn = document.getElementById("mutebtn");
             this.fullscreenBtn = document.getElementById("fullscreentoggle");
-            this.InventoryWrapper = document.getElementById("inventory");
+            this.characterMenuDiv = document.getElementById("CharacterMenu");
         }
 
         create() {
@@ -57,12 +56,6 @@ module RpgGame {
             this.musicMuteBtn.addEventListener('click', this.ToggleMusic.bind(this));
             this.fullscreenBtn.addEventListener('click', this.ToggleFullScreen.bind(this));
 
-            var inventoryKey = this.input.keyboard.addKey(Phaser.Keyboard.I);
-            inventoryKey.onDown.add(this.ToggleInventory, this);
-
-            var equipmentKey = this.input.keyboard.addKey(Phaser.Keyboard.E);
-            equipmentKey.onDown.add(this.ToggleEquipment, this);
-
             //Speler initaliseren
           /*  speler = new Player(this.game, this.world.centerX, 350)
             speler.visible = false; */
@@ -74,47 +67,27 @@ module RpgGame {
         }
 
         addInputListeners() {
-           /* document.body.addEventListener('click', function (e) {
-                if (e.srcElement.className == "gamecharacter") {
-                    var naam = e.srcElement.children[0];
-                    var level = e.srcElement.children[1];
-
-                    //Speler naam en level goedzetten
-                    speler.SetName(naam.textContent);
-                    speler.SetLevel(level.textContent);
-
-                    
-                } 
-            }); */
-
             document.body.addEventListener('click', this.SetPlayerVariables.bind(this));
         }
 
         SetPlayerVariables(e) {
-            if (e.srcElement.className == "gamecharacter") {
+            var target = e.target.className || e.srcElement.className;
+            if (target == "gamecharacter") {
                 //Speler initialiseren
-                speler = new Player(this.game, this.game.world.centerX, 350)
+                speler = new Player(this.game, this.game.world.centerX, 350);
+                (<any>window).player = speler;
+
                 //speler.visible = false;
 
-                var naam = e.srcElement.children[0];
-                var level = e.srcElement.children[1];
+                var naam = e.target.children[0] || e.srcElement.children[0];
+                var level = e.target.children[1] || e.srcElement.children[1];
 
                 //Speler naam en level goedzetten
                 speler.SetName(naam.textContent);
                 speler.SetLevel(level.textContent);
-
-                this.HideMenu();
-
+                
                 this.fadeOut();
             } 
-        }
-
-        ToggleInventory() {
-            this.InventoryWrapper.classList.toggle("hidden");
-        }
-
-        ToggleEquipment() {
-            //this.EquipmentWrapper.classList.toggle("hidden");
         }
 
         HideMenu() {
@@ -122,6 +95,10 @@ module RpgGame {
         }
 
         ShowMenu() {
+            //Indien we terug van de game komen, alle originele knoppen zichtbaar maken.
+            this.menuDiv.children[0].classList.remove("hidden");
+                this.menuDiv.children[1].classList.remove("hidden");
+            this.menuDiv.children[2].classList.remove("hidden");
             this.menuDiv.classList.remove("hidden");
         }
 
@@ -150,6 +127,8 @@ module RpgGame {
         }
 
         startGame() {
+            //Charactermenu verbergen
+            this.characterMenuDiv.classList.add("hidden");
             //Muziek stopzetten.
             this.music.stop();
             //Spel opstarten

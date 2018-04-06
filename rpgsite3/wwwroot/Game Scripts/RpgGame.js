@@ -35,8 +35,52 @@ window.onload = function () {
         antialias: false
     });
 };
+var RpgGame;
+(function (RpgGame) {
+    var BaseUiState = /** @class */ (function (_super) {
+        __extends(BaseUiState, _super);
+        function BaseUiState() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        BaseUiState.prototype.preload = function () {
+            //ui elementen opvragen
+            this.InventoryWrapper = document.getElementById("inventory");
+            this.EquipmentWrapper = document.getElementById("equipment");
+            this.EscapeMenuWrapper = document.getElementById("escapemenu");
+            this.BackToMenuBtn = document.getElementById("backfromgame");
+        };
+        BaseUiState.prototype.create = function () {
+            var inventoryKey = this.input.keyboard.addKey(Phaser.Keyboard.I);
+            inventoryKey.onDown.add(this.ToggleInventory, this);
+            var equipmentKey = this.input.keyboard.addKey(Phaser.Keyboard.E);
+            equipmentKey.onDown.add(this.ToggleEquipment, this);
+            var escapeKey = this.input.keyboard.addKey(Phaser.Keyboard.M);
+            escapeKey.onDown.add(this.ToggleEscapeMenu, this);
+            this.BackToMenuBtn.addEventListener('click', this.BackToMenu.bind(this));
+        };
+        BaseUiState.prototype.ToggleInventory = function () {
+            this.InventoryWrapper.classList.toggle("hidden");
+        };
+        BaseUiState.prototype.ToggleEquipment = function () {
+            this.EquipmentWrapper.classList.toggle("hidden");
+        };
+        BaseUiState.prototype.ToggleEscapeMenu = function () {
+            this.EscapeMenuWrapper.classList.toggle("hidden");
+        };
+        BaseUiState.prototype.BackToMenu = function () {
+            //Alle menu's verbergen.
+            this.InventoryWrapper.classList.add("hidden");
+            this.EquipmentWrapper.classList.add("hidden");
+            this.EscapeMenuWrapper.classList.add("hidden");
+            this.game.state.start('MainMenu');
+        };
+        return BaseUiState;
+    }(Phaser.State));
+    RpgGame.BaseUiState = BaseUiState;
+})(RpgGame || (RpgGame = {}));
 /// <reference path="../lib/Phaser/phaser.d.ts"/>
 /// <reference path="../lib/Phaser/phaser-tiled.d.ts"/>
+///<reference path='UiBaseState.ts' />
 var RpgGame;
 (function (RpgGame) {
     var Tiled = Phaser.Plugin.Tiled;
@@ -51,6 +95,8 @@ var RpgGame;
             this._Time = new Phaser.Time(this.game);
         };
         GameState.prototype.preload = function () {
+            //base Ui state
+            _super.prototype.preload.call(this);
             //Phaser tiled toevoegen als plugin.
             this.add.plugin(new Tiled(this.game, this.game.stage));
             //Opslaan van benodigde assets in cachekey.
@@ -74,9 +120,10 @@ var RpgGame;
             this._Time.desiredFps = 60;
             this._Time.fpsMax = 60;
             this._Time.fpsMin = 30;
-            this.input.onDown.add(this.GoFull, this);
         };
         GameState.prototype.create = function () {
+            //Base ui state
+            _super.prototype.create.call(this);
             //Tilemap toevoegen
             this._land = this.game.add.tiledmap('myTiledMap');
             this.physics.setBoundsToWorld();
@@ -86,8 +133,6 @@ var RpgGame;
             TileLayer.resizeWorld();
             RoadLayer.scale.set(2);
             RoadLayer.resizeWorld();
-            RpgGame.speler.AddToGame(this.game);
-            RpgGame.speler.RemoveFromGame();
             RpgGame.speler.AddToGame(this.game);
             RpgGame.speler.visible = true;
             //Speler
@@ -104,17 +149,8 @@ var RpgGame;
         GameState.prototype.shutdown = function () {
             this._land.destroy();
         };
-        //Fullscreen Handler
-        GameState.prototype.GoFull = function () {
-            if (this.scale.isFullScreen) {
-                this.scale.stopFullScreen();
-            }
-            else {
-                this.scale.startFullScreen(false);
-            }
-        };
         return GameState;
-    }(Phaser.State));
+    }(RpgGame.BaseUiState));
     RpgGame.GameState = GameState;
 })(RpgGame || (RpgGame = {}));
 var RpgGame;
@@ -123,30 +159,88 @@ var RpgGame;
         function InventorySystem() {
             //Array van items
             this.bag = [];
+            this.ListenForKey = document.onkeydown;
         }
         InventorySystem.prototype.FillInventory = function () {
-            this.inventorySlots = document.getElementsByClassName("inventoryslot");
+            this.InventoryWrapper = document.getElementById("inventorywrapper");
+            this.inventorySlots = document.getElementsByClassName("gameinventoryitem");
             this.AddEventListeners();
         };
         InventorySystem.prototype.AddEventListeners = function () {
             for (var i = 0; i < this.inventorySlots.length; i++) {
-                this.inventorySlots[i].addEventListener('click', function () {
+                //ONCLICK
+                /* this.inventorySlots[i].addEventListener('click', function () {
                     console.log("Inventory Slot aangeklikt");
-                });
+                }); */
+                //RIGHT CLICK , ACTIONS LATEN ZIEN
+                this.inventorySlots[i].addEventListener('contextmenu', this.ShowContextMenu.bind(this));
             }
+        };
+        InventorySystem.prototype.ShowContextMenu = function (e) {
+            //Indien nodig oude contextmenu verbergen
+            if (this.ContextMenu != undefined) {
+                this.ContextMenu.classList.add("hidden");
+            }
+            //Contextmenu div opvragen
+            var parentDiv = e.target.parentElement || e.srcElement.parentElement;
+            this.ContextMenu = parentDiv.getElementsByClassName("context-menu")[0];
+            console.log("Right Click");
+            e.preventDefault();
+            //Contextmenu laten zien
+            this.ContextMenu.classList.remove("hidden");
+            this.ContextMenu.style.display = 'block';
+            this.ContextMenu.style.left = e.offsetX + 10 + 'px';
+            //Onclick handelen van opties
+            for (var i = 0; i < this.ContextMenu.childElementCount; i++) {
+                var item = this.ContextMenu.children[i];
+                //ul negeren
+                if (item.outerHTML === "ul") {
+                }
+                else {
+                    item.addEventListener('click', this.HandleContextClick.bind(this));
+                }
+            }
+            return false;
+        };
+        InventorySystem.prototype.HandleContextClick = function (e) {
+            var item = e.target || e.srcElement;
+            console.log("Clicked : " + item.className);
+            //Context menu verbergen
+            this.HideContextMenu();
+        };
+        InventorySystem.prototype.HideContextMenu = function () {
+            this.ContextMenu.classList.add("hidden");
+            //var keycode = 
+            this.ContextMenu.style.display = 'none';
+        };
+        InventorySystem.prototype.ListenForKey = function (e) {
+            var keycode = e.which || e.keyCode;
+            if (keycode == 27) {
+                this.HideContextMenu();
+            }
+            this.HideContextMenu();
         };
         InventorySystem.prototype.GetInventory = function () {
             return this.bag;
         };
-        InventorySystem.prototype.AddItem = function (item) {
-            this.bag.push(item);
+        InventorySystem.prototype.EquipItem = function (item) {
+            console.log("equip item");
+        };
+        InventorySystem.prototype.UseItem = function (item) {
+            console.log("use item");
+            //this.bag.push(item);
+            //Inventory onclick updaten.
+            //this.FillInventory();
         };
         InventorySystem.prototype.RemoveItem = function (item) {
             //Index zoeken en item verwijderen
-            var index = this.bag.indexOf(item);
-            if (index > -1) {
-                this.bag.splice(index, 1);
-            }
+            /*  var index = this.bag.indexOf(item);
+              if (index > -1) {
+                  this.bag.splice(index, 1);
+              }
+              //Inventory onclick updaten
+              this.FillInventory(); */
+            console.log("remove item");
         };
         return InventorySystem;
     }());
@@ -158,6 +252,12 @@ var RpgGame;
     var Item = /** @class */ (function () {
         function Item() {
         }
+        Item.prototype.SetName = function (name) {
+            this.name = name;
+        };
+        Item.prototype.SetDescription = function (description) {
+            this.description = description;
+        };
         return Item;
     }());
     RpgGame.Item = Item;
@@ -185,7 +285,7 @@ var RpgGame;
             this.menuDiv = document.getElementById("MainMenu");
             this.musicMuteBtn = document.getElementById("mutebtn");
             this.fullscreenBtn = document.getElementById("fullscreentoggle");
-            this.InventoryWrapper = document.getElementById("inventory");
+            this.characterMenuDiv = document.getElementById("CharacterMenu");
         };
         MainMenu.prototype.create = function () {
             //Achtergrond en logo toevoegen
@@ -206,10 +306,6 @@ var RpgGame;
             //this.playBtn.addEventListener('click', this.fadeOut.bind(this));
             this.musicMuteBtn.addEventListener('click', this.ToggleMusic.bind(this));
             this.fullscreenBtn.addEventListener('click', this.ToggleFullScreen.bind(this));
-            var inventoryKey = this.input.keyboard.addKey(Phaser.Keyboard.I);
-            inventoryKey.onDown.add(this.ToggleInventory, this);
-            var equipmentKey = this.input.keyboard.addKey(Phaser.Keyboard.E);
-            equipmentKey.onDown.add(this.ToggleEquipment, this);
             //Speler initaliseren
             /*  speler = new Player(this.game, this.world.centerX, 350)
               speler.visible = false; */
@@ -218,44 +314,31 @@ var RpgGame;
             //speler.GetInventory().FillInventory();
         };
         MainMenu.prototype.addInputListeners = function () {
-            /* document.body.addEventListener('click', function (e) {
-                 if (e.srcElement.className == "gamecharacter") {
-                     var naam = e.srcElement.children[0];
-                     var level = e.srcElement.children[1];
- 
-                     //Speler naam en level goedzetten
-                     speler.SetName(naam.textContent);
-                     speler.SetLevel(level.textContent);
- 
-                     
-                 }
-             }); */
             document.body.addEventListener('click', this.SetPlayerVariables.bind(this));
         };
         MainMenu.prototype.SetPlayerVariables = function (e) {
-            if (e.srcElement.className == "gamecharacter") {
+            var target = e.target.className || e.srcElement.className;
+            if (target == "gamecharacter") {
                 //Speler initialiseren
                 RpgGame.speler = new RpgGame.Player(this.game, this.game.world.centerX, 350);
+                window.player = RpgGame.speler;
                 //speler.visible = false;
-                var naam = e.srcElement.children[0];
-                var level = e.srcElement.children[1];
+                var naam = e.target.children[0] || e.srcElement.children[0];
+                var level = e.target.children[1] || e.srcElement.children[1];
                 //Speler naam en level goedzetten
                 RpgGame.speler.SetName(naam.textContent);
                 RpgGame.speler.SetLevel(level.textContent);
-                this.HideMenu();
                 this.fadeOut();
             }
-        };
-        MainMenu.prototype.ToggleInventory = function () {
-            this.InventoryWrapper.classList.toggle("hidden");
-        };
-        MainMenu.prototype.ToggleEquipment = function () {
-            //this.EquipmentWrapper.classList.toggle("hidden");
         };
         MainMenu.prototype.HideMenu = function () {
             this.menuDiv.classList.add("hidden");
         };
         MainMenu.prototype.ShowMenu = function () {
+            //Indien we terug van de game komen, alle originele knoppen zichtbaar maken.
+            this.menuDiv.children[0].classList.remove("hidden");
+            this.menuDiv.children[1].classList.remove("hidden");
+            this.menuDiv.children[2].classList.remove("hidden");
             this.menuDiv.classList.remove("hidden");
         };
         MainMenu.prototype.ToggleFullScreen = function () {
@@ -280,6 +363,8 @@ var RpgGame;
             //tween.onComplete.add(this.startGame, this);
         };
         MainMenu.prototype.startGame = function () {
+            //Charactermenu verbergen
+            this.characterMenuDiv.classList.add("hidden");
             //Muziek stopzetten.
             this.music.stop();
             //Spel opstarten
@@ -333,6 +418,7 @@ var RpgGame;
             //Waardes goedzetten.
             //this.currentState = playerStates.ALIVE;
             //this.isHitting = false;
+            _this.inventory = new RpgGame.InventorySystem();
             //Sprite control
             _this.anchor.setTo(0.5, 0.5);
             _this.scale.set(2);
@@ -341,9 +427,6 @@ var RpgGame;
         Player.prototype.AddToGame = function (game) {
             game.physics.enable(this, Phaser.Physics.ARCADE);
             game.add.existing(this);
-        };
-        Player.prototype.RemoveFromGame = function () {
-            this.destroy();
         };
         Player.prototype.GetInventory = function () {
             return this.inventory;
