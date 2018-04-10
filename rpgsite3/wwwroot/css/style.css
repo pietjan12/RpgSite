@@ -1271,6 +1271,16 @@ font-weight: 600;
     justify-items: center;
 }
 
+#equipmentwrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: 
+    "leftitems stats rightitems" 
+    "leftitems stats rightitems" 
+    "leftitems stats rightitems";
+   justify-items: center;
+}
+
 /* Padding zodat plaatje niet direct op de achtergrond zit geplakt */
 .popover-header {
     padding: 5px;
@@ -1409,6 +1419,18 @@ font-weight: 600;
 .ChooseCharacterBtn{
     color: inherit;
     text-decoration: none;
+}
+
+.leftequip {
+    grid-area: leftitems;
+}
+
+.middleequip {
+    grid-area: stats;
+}
+
+.rightequip {
+    grid-area: rightitems;
 }
 
 /* Game Page */

@@ -3,13 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Api.Interfaces
+namespace Data.Repos.Interfaces
 {
-    //Repository Context
-    public interface IEnemies
+    //gebruik maken van een interface voor repository zodat dependency injection gebruikt kan worden.
+    public interface IEnemyRepository
     {
         IEnumerable<Monster> getAll();
         IEnumerable<Monster> getByName(String name);
-
     }
 }

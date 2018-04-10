@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Api.Interfaces
+namespace Data.Contexts
 {
-    public interface IAccount
+    public interface IAccountContext
     {
         bool Login(string username, string password);
         bool Register(string username, string password);

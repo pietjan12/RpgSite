@@ -99,30 +99,44 @@ namespace rpgsite3.Controllers
             return null;
         }
 
+        [HttpPost]
+        public IActionResult GetEquipment(string charactername) {
+            if(!string.IsNullOrEmpty(charactername)) {
+                var model = new CharacterModel();
+                var _MyChosenCharacter = _CharacterService.FindCharacterByName(charactername);
+                if (_MyChosenCharacter != null)
+                {
+                    model.character = _MyChosenCharacter;
+                    return View(model);
+                }
+            }
+            return null;
+        }
+
 
         // game calls die inventory beinvloeden.
         //TODO MAKEN
         
         //IN DIT GEVAL WORDT HTML.ACTIONLINK GEBRUIKT VOOR DE BUILT-IN OMZETTER VAN COMPLEXE OBJECTEN NAAR PARAMETERS. 
         [HttpPost]
-        public IActionResult use(Item test)
+        public IActionResult use(Item myItem)
         {
-            bool used = _CharacterService.UseItem(test);
-            return Json(test);
+            bool used = _CharacterService.UseItem(myItem);
+            return Json(myItem);
         }
 
         [HttpPost]
-        public IActionResult equip(Item test)
+        public IActionResult equip(Item myItem, int characterID)
         {
-            _CharacterService.EquipItem(test);
+            _CharacterService.EquipItem(myItem, characterID);
 
-            return Json(test);
+            return Json(myItem);
         }
 
         [HttpPost]
-        public IActionResult drop(Item test)
+        public IActionResult drop(Item myItem)
         {
-            bool droppedItem = _CharacterService.DropItem(test);
+            bool droppedItem = _CharacterService.DropItem(myItem);
             return Json(droppedItem);
         }
     }

@@ -96,6 +96,10 @@ module RpgGame {
             this.intelligence = intelligence;
         }
 
+        public UpdateStats() {
+            this.inventory.updateStats();
+        }
+
         update() {
 
             this.body.velocity.x = 0;

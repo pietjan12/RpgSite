@@ -1,21 +1,23 @@
-﻿using Api.Interfaces;
+﻿using Data.Contexts;
 using Api.Models;
 using Dapper;
-using Data.Base;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Data.SqlClient;
 
 namespace Data
 {
-    public class CharacterRepository : BaseRepo, ICharacter
+    public class CharacterSqlContext : ICharacterContext
     {
-        public CharacterRepository(IConfiguration config) : base(config)
-        {
+        private string ConnectionString;
 
+        public CharacterSqlContext(IConfiguration config)
+        {
+            this.ConnectionString = config["Data:TestConnection"];
         }
 
         public Character FindCharacterByName(string naam)
@@ -61,7 +63,7 @@ namespace Data
             using (IDbConnection db = OpenConnection())
             {
                 string sQuery = "RemoveItem";
-                var changedRows = db.Execute(sQuery, new { id = item.id }, commandType: CommandType.StoredProcedure);
+                var changedRows = db.Execute(sQuery, new { id = item.id}, commandType: CommandType.StoredProcedure);
 
                 if(changedRows > 0)
                 {
@@ -80,12 +82,12 @@ namespace Data
             return true;
         }
 
-        public bool EquipItem(Item item)
+        public bool EquipItem(Item item, int characterID)
         {
             using (IDbConnection db = OpenConnection())
             {
                 string sQuery = "EquipItem";
-                var changedRows = db.Execute(sQuery, new { id = item.id, equip = !item.equipped, item.category }, commandType: CommandType.StoredProcedure);
+                var changedRows = db.Execute(sQuery, new { id = item.id, equip = !item.equipped, item.category, characterid = characterID }, commandType: CommandType.StoredProcedure);
 
                 if (changedRows > 0)
                 {
@@ -93,6 +95,11 @@ namespace Data
                 }
             }
             return false;
+        }
+
+        private SqlConnection OpenConnection()
+        {
+            return new SqlConnection(ConnectionString);
         }
     }
 }

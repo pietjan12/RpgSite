@@ -155,14 +155,21 @@ var RpgGame;
 })(RpgGame || (RpgGame = {}));
 var RpgGame;
 (function (RpgGame) {
+    //<summary>Deze klassen gaat over de overgang van interactie met de inventory/equipment dom elementen en de phaser game variabelen.<summary>
     var InventorySystem = /** @class */ (function () {
         function InventorySystem() {
             this.ListenForKey = document.onkeydown;
         }
         InventorySystem.prototype.FillInventory = function () {
             this.InventoryWrapper = document.getElementById("inventorywrapper");
-            this.inventorySlots = document.getElementsByClassName("gameinventoryitem");
+            this.inventorySlots = this.InventoryWrapper.getElementsByClassName("gameinventoryitem");
             this.AddEventListeners();
+        };
+        InventorySystem.prototype.FillEquipment = function () {
+            this.EquipmentWrapper = document.getElementById("equipmentwrapper");
+            this.equipmentSlots = this.EquipmentWrapper.getElementsByClassName("gameinventoryitem");
+            this.AddEquipmentEventListeners();
+            this.AddStatsToUI();
         };
         InventorySystem.prototype.AddEventListeners = function () {
             for (var i = 0; i < this.inventorySlots.length; i++) {
@@ -172,6 +179,11 @@ var RpgGame;
                 }); */
                 //RIGHT CLICK , ACTIONS LATEN ZIEN
                 this.inventorySlots[i].addEventListener('contextmenu', this.ShowContextMenu.bind(this));
+            }
+        };
+        InventorySystem.prototype.AddEquipmentEventListeners = function () {
+            for (var i = 0; i < this.equipmentSlots.length; i++) {
+                this.equipmentSlots[i].addEventListener('contextmenu', this.ShowContextMenu.bind(this));
             }
         };
         InventorySystem.prototype.ShowContextMenu = function (e) {
@@ -218,9 +230,33 @@ var RpgGame;
             }
             this.HideContextMenu();
         };
+        InventorySystem.prototype.AddStatsToUI = function () {
+            var strength = RpgGame.speler.GetStrength();
+            var intelligence = RpgGame.speler.GetIntelligence();
+            document.getElementById("playerstr").innerHTML = "Str : " + strength.toString();
+            document.getElementById("playerint").innerHTML = " Int : " + intelligence.toString();
+        };
+        InventorySystem.prototype.updateStats = function () {
+            //FIXEN DOET HET NU DUBBEL
+            var strengthToAdd = this.EquipmentWrapper.getElementsByClassName("strstat");
+            var intToAdd = this.EquipmentWrapper.getElementsByClassName("intstat");
+            //strength updaten
+            for (var i = 0; i < strengthToAdd.length; i++) {
+                var value = strengthToAdd[i].textContent.split(" : ")[1];
+                console.log("str node value : " + value);
+                RpgGame.speler.SetStrength(RpgGame.speler.GetStrength() + Number(value));
+            }
+            //intelligence updaten
+            for (var i = 0; i < intToAdd.length; i++) {
+                var value = intToAdd[i].textContent.split(" : ")[1];
+                console.log('int node value : ' + value);
+                RpgGame.speler.SetIntelligence(RpgGame.speler.GetIntelligence() + Number(value));
+            }
+            this.AddStatsToUI();
+        };
         InventorySystem.prototype.EquipItem = function (item) {
             if (item.equipped === true) {
-                if (this.TempInt !== undefined && this.TempStrength !== undefined) {
+                if (this.TempInt != undefined && this.TempStrength != undefined && this.TempCategory === item.category) {
                     console.log("Oude Stats Verwijderen");
                     RpgGame.speler.SetStrength(RpgGame.speler.GetStrength() - this.TempStrength);
                     RpgGame.speler.SetIntelligence(RpgGame.speler.GetIntelligence() - this.TempInt);
@@ -228,11 +264,16 @@ var RpgGame;
                 //Temp variables updaten
                 this.TempInt = item.intelligence;
                 this.TempStrength = item.strength;
+                this.TempCategory = item.category;
                 //item is geequiped in inventory, stats verhogen.
                 RpgGame.speler.SetStrength(RpgGame.speler.GetStrength() + item.strength);
                 RpgGame.speler.SetIntelligence(RpgGame.speler.GetIntelligence() + item.intelligence);
             }
             else {
+                //Tempstats terugzetten.
+                this.TempInt = undefined;
+                this.TempStrength = undefined;
+                this.TempCategory = undefined;
                 //item is geunequiped in equipment scherm, stats verlagen.
                 RpgGame.speler.SetStrength(RpgGame.speler.GetStrength() - item.strength);
                 RpgGame.speler.SetIntelligence(RpgGame.speler.GetIntelligence() - item.intelligence);
@@ -377,6 +418,11 @@ var RpgGame;
             //tween.onComplete.add(this.startGame, this);
         };
         MainMenu.prototype.startGame = function () {
+            //standaard waardes terugzetten, in geval de speler vanuit main menu opnieuw inlogt.
+            RpgGame.speler.SetStrength(10);
+            RpgGame.speler.SetIntelligence(10);
+            //speler stats updaten
+            RpgGame.speler.UpdateStats();
             //Charactermenu verbergen
             this.characterMenuDiv.classList.add("hidden");
             //Muziek stopzetten.
@@ -465,6 +511,9 @@ var RpgGame;
         };
         Player.prototype.SetIntelligence = function (intelligence) {
             this.intelligence = intelligence;
+        };
+        Player.prototype.UpdateStats = function () {
+            this.inventory.updateStats();
         };
         Player.prototype.update = function () {
             this.body.velocity.x = 0;

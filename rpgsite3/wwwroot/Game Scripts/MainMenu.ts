@@ -127,6 +127,12 @@ module RpgGame {
         }
 
         startGame() {
+            //standaard waardes terugzetten, in geval de speler vanuit main menu opnieuw inlogt.
+            speler.SetStrength(10);
+            speler.SetIntelligence(10);
+            //speler stats updaten
+            speler.UpdateStats();
+
             //Charactermenu verbergen
             this.characterMenuDiv.classList.add("hidden");
             //Muziek stopzetten.

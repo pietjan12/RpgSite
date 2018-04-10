@@ -12,8 +12,6 @@ namespace Api.Models
         public string Text { get; set; }
         public DateTime PostDate { get; set; }
         public string Img_Loc { get; set; }
-
-        public Gebruiker user { get; set; }
-        
+        public string author { get; set; }
     }
 }

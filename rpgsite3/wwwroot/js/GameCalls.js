@@ -3,7 +3,7 @@ function hideMainMenu() {
     $("#MainMenu").find('#play').addClass("hidden");
     $("#MainMenu").find('#optionsbtn').addClass("hidden");
     $("#MainMenu").find('#quitmenu').addClass("hidden");
-};
+}
 
 function showMainMenu() {
     $("#MainMenu").find('#play').removeClass("hidden");
@@ -20,7 +20,7 @@ function OnGetCharacters(data) {
     charactermenu.empty();
     charactermenu.prepend(data);
     charactermenu.removeClass("hidden");
-};
+}
 
 function OnGetInventory(data) {
     hideMainMenu();
@@ -32,6 +32,19 @@ function OnGetInventory(data) {
 
     //Speler inventory updaten
     window.player.inventory.FillInventory();
+
+    //equipment ophalen
+    refreshEquipment();
+}
+
+function OnGetEquipment(data) {
+    var equipmentmenu = $("#MainMenu").find('#equipment');
+    equipmentmenu.empty();
+    equipmentmenu.prepend(data);
+
+    //?? misschien
+    window.player.inventory.FillEquipment();
+    //window.player.inventory.FillEquipment();
 }
 
 function onEquipSuccess(data) {
@@ -67,6 +80,20 @@ function refreshInventory() {
         data: { charactername : characterName },
         success: function (data) {
             OnGetInventory(data);
+        }
+    }); 
+}
+
+function refreshEquipment() {
+    //Equipment ophalen
+    var characterName = $("#inventory").find(".gameh1").text().split(" - ")[1];
+
+    $.ajax({
+        url: "../Character/GetEquipment",
+        type: "POST",
+        data: { charactername: characterName },
+        success: function (data) {
+            OnGetEquipment(data);
         }
     }); 
 }

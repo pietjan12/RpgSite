@@ -21,20 +21,20 @@
                             @foreach (var action in item.actions)
                             {
                                 <li class="@action-btn">
-                                    @Html.ActionLink(item.equipped && action == "Equip" ? "Unequip" : action, action, "Character", item, new
-                               {
+                                @Html.ActionLink(item.equipped && action == "Equip" ? "Unequip" : action, action, "Character", new { item.id, item.name, item.description, item.img_loc, item.strength, item.intelligence, item.Rarity, item.level, item.category, item.actions, item.defense, item.equipped ,characterID = Model.character.id} , new
+                                {
                                    data_ajax = "true",
                                    data_ajax_method = "POST",
                                    data_ajax_success = "on" + action + "Success"
-                               })
+                                })
                                 </li>
                             }
                         }
                     </ul>
                 </div>
                 <img src="~/images/items/@item.img_loc" class="itemImage" />
-                <a href="#" class="iteminfo" data-toggle="popover" data-placement="left" data-popover-content=".hoverinfo"></a>
-                <div class="hoverinfo hidden">
+                <a href="#" class="iteminfo" data-toggle="popover" data-placement="left" data-popover-content=".inventoryhover"></a>
+                <div class="hoverinfo inventoryhover hidden">
                     <div class="popover-heading">
                         <img class="itemimg" src="~/images/items/@item.img_loc" />
                     </div>

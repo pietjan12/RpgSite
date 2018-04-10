@@ -9,8 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Data;
 using Services;
 using Services.Interfaces;
-using Api.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Data.Contexts;
+using Data.Repos.Interfaces;
+using Data.Repos;
 
 namespace rpgsite3
 {
@@ -31,16 +33,20 @@ namespace rpgsite3
 
             //News services
             services.AddScoped<INewsService, NewsService>();
-            services.AddTransient<INews, NewsRepository>();
+            services.AddScoped<INewsRepository, NewsRepository>();
+            services.AddScoped<INewsContext, NewsSqlContext>();
             //Enemy list services
             services.AddScoped<iEnemyService, EnemyService>();
-            services.AddTransient<IEnemies, MonsterGalleryRepository>();
+            services.AddScoped<IEnemyRepository, EnemiesRepository>();
+            services.AddScoped<IEnemiesContext, MonsterGallerySqlContext>();
             //Character services
             services.AddScoped<ICharacterService, CharacterService>();
-            services.AddTransient<ICharacter, CharacterRepository>();
+            services.AddScoped<ICharacterRepository, CharacterRepository>();
+            services.AddScoped<ICharacterContext, CharacterSqlContext>();
             //Account services
             services.AddScoped<IAccountService, AccountService>();
-            services.AddTransient<IAccount, AccountRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountContext, AccountSqlContext>();
 
             //Authentication toevoegen
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o => o.LoginPath = "/");
@@ -107,9 +113,6 @@ namespace rpgsite3
                 name: "game",
                 template: "game/",
                 defaults: new { controller = "Game", action = "Index" });
-
-               
-
 
                 routes.MapRoute(
                 name: "default",

@@ -4,17 +4,19 @@ using System.Data;
 using System.Data.SqlClient;
 using Dapper;
 using MySql.Data.MySqlClient;
-using Data.Base;
 using Microsoft.Extensions.Configuration;
-using Api.Interfaces;
+using Data.Contexts;
 using Api.Models;
 
 namespace Data
 {
-    public class MonsterGalleryRepository : BaseRepo, IEnemies
+    public class MonsterGallerySqlContext : IEnemiesContext
     {
-        public MonsterGalleryRepository(IConfiguration config) : base(config)
+        private string ConnectionString;
+
+        public MonsterGallerySqlContext(IConfiguration config)
         {
+            this.ConnectionString = config["Data:TestConnection"];
         }
 
         public IEnumerable<Monster> getAll()
@@ -34,6 +36,11 @@ namespace Data
                 string sQuery = "SELECT * FROM ENEMIES WHERE NAME = @naam";
                 return db.Query<Monster>(sQuery, new { naam = name });
             }
+        }
+
+        private SqlConnection OpenConnection()
+        {
+            return new SqlConnection(ConnectionString);
         }
     }
 }

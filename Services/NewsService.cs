@@ -3,19 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Api.Models;
-using Api.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Linq;
+using Data.Repos.Interfaces;
 
 namespace Services
 {
     public class NewsService : INewsService
     {
-        private readonly INews _context;
+        private readonly INewsRepository _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public NewsService(INews context, IHttpContextAccessor httpContextAccessor)
+        public NewsService(INewsRepository context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
