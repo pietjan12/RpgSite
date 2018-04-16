@@ -70,19 +70,35 @@ module RpgGame {
 
             var TileLayer = this._land.layers[0];
             var RoadLayer = this._land.layers[1];
-            TileLayer.scale.set(2);
+
+            TileLayer.scale.set(1);
             TileLayer.resizeWorld();
-            RoadLayer.scale.set(2);
-            RoadLayer.resizeWorld()
-            speler.AddToGame(this.game);
+
+            RoadLayer.scale.set(1);
+            RoadLayer.resizeWorld();
+
+            this.game.physics.enable(speler, Phaser.Physics.ARCADE);
+            this.game.add.existing(speler);
 
             speler.visible = true;
             //Speler
-            this.camera.follow(speler);
+            this.game.camera.follow(speler);
 
+            var BattleTestKey = this.input.keyboard.addKey(Phaser.Keyboard.H);
+            BattleTestKey.onDown.add(this.CheckForBattleTest, this);
 
             //Text
             //this._playerHealthText = this.game.add.text(10, 500, "Health: " + this._Player.getPlayerHealth(), { font: "20px Arial", fill: "#FFFFFF", align: "center" });
+        }
+
+        CheckForBattleTest(): void {
+            if (this.game.input.keyboard.isDown(Phaser.Keyboard.H)) {
+                this.StartBattle();
+            }
+        }
+
+        StartBattle(): void {
+            this.game.state.start('BattleMenu');
         }
 
         update(): void {
@@ -95,6 +111,7 @@ module RpgGame {
 
         shutdown() {
             this._land.destroy();
+            this.world.remove(speler);
         }
     }
 

@@ -1,5 +1,5 @@
-﻿using Api.Interfaces;
-using Api.Models;
+﻿using Api.Models;
+using Data.Repos.Interfaces;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,30 +9,33 @@ namespace Services
 {
     public class CharacterService : ICharacterService
     {
-        private readonly ICharacter _context;
+        private readonly ICharacterRepository _context;
 
-        public CharacterService(ICharacter context)
+        public CharacterService(ICharacterRepository context)
         {
             _context = context;
         }
 
-        public Character FindCharacterByName(string name)
+        public Character FindCharacterByName(string name, bool FillInventorySlots)
         {
             Character character = _context.FindCharacterByName(name);
 
             if (character != null)
             {
-                //Controleren of er voldoende items in de inventory zitten om te laten zien op de character page, anders vullen met empty slots.
-                while (character.inventory.Count < 10)
+                if (FillInventorySlots)
                 {
-                    //Placeholder item aanmaken
-                    Item i = new Item();
-                    i.name = "Empty Slot";
-                    i.description = "An Empty Slot";
-                    i.Rarity = Rarity.Common;
-                    i.img_loc = "emptyslot.png";
-                    //Item toevoegen aan inventory
-                    character.inventory.Add(i);
+                    //Controleren of er voldoende items in de inventory zitten om te laten zien op de character page, anders vullen met empty slots.
+                    while (character.inventory.FindAll(i => i.equipped == false).Count < 15)
+                    {
+                        //Placeholder item aanmaken
+                        Item i = new Item();
+                        i.name = "Empty Slot";
+                        i.description = "An Empty Slot";
+                        i.Rarity = Rarity.Common;
+                        i.img_loc = "emptyslot.png";
+                        //Item toevoegen aan inventory
+                        character.inventory.Add(i);
+                    }
                 }
             }
 
@@ -50,10 +53,9 @@ namespace Services
             return _context.DropItem(item);
         }
 
-        public bool EquipItem(Item item)
+        public bool EquipItem(Item item, int characterID)
         {
-
-            bool ChangedEquip = _context.EquipItem(item);
+            bool ChangedEquip = _context.EquipItem(item, characterID);
             if(ChangedEquip)
             {
                 //Equipstatus flippen.

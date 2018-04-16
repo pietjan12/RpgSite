@@ -1,25 +1,14 @@
 ﻿/// <reference path="../lib/Phaser/phaser.d.ts"/>
 /// <reference path="../lib/Phaser/phaser-tiled.d.ts"/>
+/// <reference path="Unit.ts"/>
 
 module RpgGame {
-    export enum playerStates {
-      ALIVE,
-      HIT,
-      DEAD
-    }
 
-    export enum lookingDirection {
-        LEFT,
-        RIGHT,
-        DOWN,
-        UP
-    }
-
-    export class Player extends Phaser.Sprite {
+    export class Player extends Unit {
         private playername: string;
-        private level: number;
-        private strength: number;
-        private intelligence: number;
+        //private level: number;
+        //private strength: number;
+        //private intelligence: number;
         //inventory
         private inventory: InventorySystem;
 
@@ -45,27 +34,24 @@ module RpgGame {
 
 
         constructor(game: Phaser.Game, x?: number, y?: number, key?: string, frame?: string | number) {
-            super(game, x, y, 'player', 0);
+            //Speler mag altijd als eerste slaan in een battle.
+            super(game, 1, 1, x, y, key, 0);
 
             //Waardes goedzetten.
             //this.currentState = playerStates.ALIVE;
             //this.isHitting = false;
+            
 
             this.inventory = new InventorySystem();
             //base values
-            this.strength = 10;
-            this.intelligence = 10;
+           /*  this.strength = 10;
+            this.intelligence = 10; */
 
             //Sprite control
             this.anchor.setTo(0.5, 0.5);
-            this.scale.set(2);
+            this.scale.set(1);
 
            
-        }
-
-        public AddToGame(game: Phaser.Game) {
-            game.physics.enable(this, Phaser.Physics.ARCADE);
-            game.add.existing(this);
         }
 
         public GetInventory() {
@@ -73,11 +59,11 @@ module RpgGame {
         }
 
         public GetStrength() {
-            return this.strength;
+            return super.getStrength();
         }
 
         public GetIntelligence() {
-            return this.intelligence;
+            return super.getIntelligence();
         }
 
         public SetName(name) {
@@ -85,15 +71,21 @@ module RpgGame {
         }
 
         public SetLevel(level) {
-            this.level = level;
+            super.setLevel(level);
         }
 
         public SetStrength(strength) {
-            this.strength = strength;
+            super.setStrength(strength);
         }
 
         public SetIntelligence(intelligence) {
-            this.intelligence = intelligence;
+            super.setIntelligence(intelligence);
+        }
+
+        public UpdateStats() {
+            this.SetStrength(10);
+            this.SetIntelligence(10);
+            this.inventory.updateStats();
         }
 
         update() {

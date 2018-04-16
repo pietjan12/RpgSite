@@ -18,8 +18,9 @@ module RpgGame {
             this.load.image('titlepage', '../sprites/mainmenu/mainmenubackground.png');
             this.load.image('logo', '../sprites/mainmenu/logo.png');
             this.load.audio('music', '../Media/mainmenu/intro.mp3', true);
+            this.load.image('Player', '../sprites/car.png');
             //Scaling goedzetten.
-            this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+            this.scale.fullScreenScaleMode = Phaser.ScaleManager.RESIZE;
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
             this.scale.fullScreenTarget = document.getElementById("phaserGame");
@@ -74,10 +75,9 @@ module RpgGame {
             var target = e.target.className || e.srcElement.className;
             if (target == "gamecharacter") {
                 //Speler initialiseren
-                speler = new Player(this.game, this.game.world.centerX, 350);
+                speler = new Player(this.game, this.game.world.centerX, 350,"Player");
+               
                 (<any>window).player = speler;
-
-                //speler.visible = false;
 
                 var naam = e.target.children[0] || e.srcElement.children[0];
                 var level = e.target.children[1] || e.srcElement.children[1];
@@ -132,8 +132,6 @@ module RpgGame {
             //Muziek stopzetten.
             this.music.stop();
             //Spel opstarten
-            this.game.state.add('GameState', GameState, false);
-
             this.game.state.start('GameState');
         }
     }

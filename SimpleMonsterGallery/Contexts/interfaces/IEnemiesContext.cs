@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Api.Interfaces
+namespace Data.Contexts
 {
     //Repository Context
-    public interface IEnemies
+    public interface IEnemiesContext
     {
         IEnumerable<Monster> getAll();
         IEnumerable<Monster> getByName(String name);
-
+        IEnumerable<Monster> GenerateMonsters(int numberOfMonsters);
     }
 }

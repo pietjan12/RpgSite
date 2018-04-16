@@ -1271,6 +1271,16 @@ font-weight: 600;
     justify-items: center;
 }
 
+#equipmentwrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: 
+    "leftitems stats rightitems" 
+    "leftitems stats rightitems" 
+    "leftitems stats rightitems";
+   justify-items: center;
+}
+
 /* Padding zodat plaatje niet direct op de achtergrond zit geplakt */
 .popover-header {
     padding: 5px;
@@ -1411,6 +1421,48 @@ font-weight: 600;
     text-decoration: none;
 }
 
+.leftequip {
+    grid-area: leftitems;
+}
+
+.middleequip {
+    grid-area: stats;
+}
+
+.rightequip {
+    grid-area: rightitems;
+}
+
+#battlemenu {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 5vw;
+    background: url(../sprites/mainmenu/options/checker_black.png);
+}
+
+.battlewrapper{
+    
+}
+
+.bottompart{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.healthstatus {
+    justify-self: center;
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.actions.div {
+    justify-self: center;
+}
+
 /* Game Page */
 /* Volledige navbar weergeven */
 @media (min-width: 992px) {
@@ -1419,16 +1471,16 @@ font-weight: 600;
         background-color: transparent;
     }
 
-        /* kleur navbar items voor geen achtergrond */
-        #mainNav .navbar-nav > li > a,
-        #mainNav .navbar-nav > li > a:focus 
-        {
-            color: rgba(255, 255, 255, 0.7);
-        }
+    /* kleur navbar items voor geen achtergrond */
+    #mainNav .navbar-nav > li > a,
+    #mainNav .navbar-nav > li > a:focus 
+    {
+        color: rgba(255, 255, 255, 0.7);
+    }
 
-        .navbar-brand {
-            color: rgba(255, 255, 255, 0.7) !important;
-        }
+    .navbar-brand {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
 
         
 

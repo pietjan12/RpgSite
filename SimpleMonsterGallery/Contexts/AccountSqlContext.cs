@@ -1,5 +1,4 @@
-﻿using Api.Interfaces;
-using Data.Base;
+﻿using Data.Contexts;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -7,14 +6,17 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using BCrypt;
+using System.Data.SqlClient;
 
 namespace Data
 {
-    public class AccountRepository : BaseRepo, IAccount
+    public class AccountSqlContext : IAccountContext
     {
-        public AccountRepository(IConfiguration config) : base(config)
-        {
+        private string ConnectionString;
 
+        public AccountSqlContext(IConfiguration config)
+        {
+            this.ConnectionString = config["Data:TestConnection"];
         }
 
         public bool IsAdmin(string username)
@@ -99,5 +101,9 @@ namespace Data
                 return false;
             }
         }
+
+        private SqlConnection OpenConnection() {
+            return new SqlConnection(ConnectionString);
+        } 
     }
 }
