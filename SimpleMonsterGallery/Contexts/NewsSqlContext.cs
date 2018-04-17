@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using MySql.Data.MySqlClient;
-using Data.Base;
-using Api.Interfaces;
+using Data.Contexts;
 using Api.Models;
 using Microsoft.Extensions.Configuration;
 using Dapper;
 using Microsoft.AspNetCore.Http;
+using System.Data.SqlClient;
 
 namespace Data
 {
-    public class NewsRepository : BaseRepo, INews
+    public class NewsSqlContext : INewsContext
     {
-        public NewsRepository(IConfiguration config) : base(config)
+        private string ConnectionString;
+
+        public NewsSqlContext(IConfiguration config)
         {
-           
+            this.ConnectionString = config["Data:TestConnection"];
         }
 
         public bool CreateArticle(string Title, string text, string img_loc, string username)
@@ -56,9 +58,7 @@ namespace Data
             {
                 string sQuery = "GetAllNews";
 
-                var list = db.Query<News, Gebruiker, News>(sQuery, (news, gebruiker) => { news.user = gebruiker; return news; },splitOn: "user_id", commandType: CommandType.StoredProcedure).AsList();
-
-                return list;
+                return db.Query<News>(sQuery, commandType: CommandType.StoredProcedure).AsList();
             }
         }
 
@@ -67,8 +67,13 @@ namespace Data
             using (IDbConnection db = OpenConnection())
             {
                 string sQuery = "FindNews";
-                return db.Query<News, Gebruiker, News>(sQuery, (news, gebruiker) => { news.user = gebruiker; return news; }, new { newsid = id }, splitOn: "user_id", commandType: CommandType.StoredProcedure).AsList();
+                return db.Query<News>(sQuery, new { newsid = id }, commandType: CommandType.StoredProcedure).AsList();
             }
+        }
+
+        private SqlConnection OpenConnection()
+        {
+            return new SqlConnection(ConnectionString);
         }
     }
 }

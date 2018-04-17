@@ -40,5 +40,11 @@ namespace rpgsite3.Controllers
             ViewData["bodyclass"] = "NoPadding";
             return View();
         }
+
+        public IActionResult GetRandomMonsters() {
+
+            var generatedEnemies = _EnemyService.GenerateMonsters();
+            return Json(generatedEnemies);
+        }
     }
 }

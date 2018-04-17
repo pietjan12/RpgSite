@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Game Scripts\AttackTurnQueue.ts" />
+    <Content Remove="wwwroot\Game Scripts\BattleState.ts" />
     <Content Remove="wwwroot\Game Scripts\game.ts" />
     <Content Remove="wwwroot\Game Scripts\GameState.ts" />
     <Content Remove="wwwroot\Game Scripts\InventorySystem.ts" />
@@ -13,6 +15,7 @@
     <Content Remove="wwwroot\Game Scripts\MainMenu.ts" />
     <Content Remove="wwwroot\Game Scripts\Player.ts" />
     <Content Remove="wwwroot\Game Scripts\UiBaseState.ts" />
+    <Content Remove="wwwroot\Game Scripts\Unit.ts" />
     <Content Remove="wwwroot\lib\jquery\jquery.d.ts" />
   </ItemGroup>
 
@@ -38,6 +41,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\Game Scripts\AttackTurnQueue.ts" />
+    <TypeScriptCompile Include="wwwroot\Game Scripts\BattleState.ts" />
     <TypeScriptCompile Include="wwwroot\Game Scripts\game.ts" />
     <TypeScriptCompile Include="wwwroot\Game Scripts\GameState.ts" />
     <TypeScriptCompile Include="wwwroot\Game Scripts\InventorySystem.ts" />
@@ -45,6 +50,7 @@
     <TypeScriptCompile Include="wwwroot\Game Scripts\MainMenu.ts" />
     <TypeScriptCompile Include="wwwroot\Game Scripts\Player.ts" />
     <TypeScriptCompile Include="wwwroot\Game Scripts\UiBaseState.ts" />
+    <TypeScriptCompile Include="wwwroot\Game Scripts\Unit.ts" />
     <TypeScriptCompile Include="wwwroot\lib\jquery\jquery.d.ts" />
   </ItemGroup>
 

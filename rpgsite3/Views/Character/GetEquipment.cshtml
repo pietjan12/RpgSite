@@ -1,20 +1,106 @@
 ﻿@model rpgsite3.Models.CharacterModel
 @{
     Layout = null;
+    //Equippeditems opvragen en sorteren op categorie.
+    var equippedItems = Model.character.inventory.Where(i => i.equipped == true).OrderBy(i => i.category);
 }
 
 
 @if (Model != null && Model.character != null)
 {
     //stats laten zien enzo en naam/level
-
-
+    <div class="gameh1">Equipment - @Model.character.naam</div>
+    @:<div id="equipmentwrapper">
     //inventory deel
-    foreach (var item in Model.character.inventory)
-    {
-        if (item.equipped) {
-            @:<div>
 
-            @:</div>
+        @:<div class="leftequip">
+        //Wapens enzo links
+        foreach (var item in equippedItems.Where(i => i.category < 5))
+        {
+            @:<div class="square gameinventoryitem">
+                <div class="context-menu hidden">
+                    <ul>
+                        @if (item.actions != null)
+                        {
+                            @foreach (var action in item.actions)
+                            {
+                                <li class="@action-btn">
+                                    @Html.ActionLink(item.equipped && action == "Equip" ? "Unequip" : action, action, "Character", new { item.id, item.name, item.description, item.img_loc, item.strength, item.intelligence, item.Rarity, item.level, item.category, item.actions, item.defense, item.equipped, characterID = Model.character.id }, new
+                                    {
+                                        data_ajax = "true",
+                                        data_ajax_method = "POST",
+                                        data_ajax_success = "on" + action + "Success"
+                                    })
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <img src="~/images/items/@item.img_loc" class="itemImage" />
+                <a href="#" class="iteminfo" data-toggle="popover" data-placement="left" data-popover-content=".equipmenthover"></a>
+                <div class="hoverinfo equipmenthover hidden">
+                    <div class="popover-heading">
+                        <img class="itemimg" src="~/images/items/@item.img_loc" />
+                    </div>
+                    <div class="popover-body">
+                        <div class="itemName">@item.name</div>
+                        <div class="stat">Level : @item.level</div>
+                        <div class="stat strstat">Strength : @item.strength</div>
+                        <div class="stat intstat">Intelligence : @item.intelligence</div>
+                        <div class="itemdescription">@item.description</div>
+                    </div>
+                </div>
+                @:</div>
         }
-    }
+        @:</div>
+
+        //stats midden
+        @:<div class="middleequip">
+           <div>
+               <div id="playerstr"></div>
+               <div id="playerint"></div>
+           </div>
+        @:</div>
+        //Armor rechts
+
+        @:<div class="rightequip">
+        foreach (var item in equippedItems.Where(i => i.category >= 5))
+        {
+            @:<div class="square gameinventoryitem">
+                <div class="context-menu hidden">
+                    <ul>
+                        @if (item.actions != null)
+                        {
+                            @foreach (var action in item.actions)
+                            {
+                                <li class="@action-btn">
+                                    @Html.ActionLink(item.equipped && action == "Equip" ? "Unequip" : action, action, "Character", new { item.id, item.name, item.description, item.img_loc, item.strength, item.intelligence, item.Rarity, item.level, item.category, item.actions, item.defense, item.equipped, characterID = Model.character.id }, new
+                                    {
+                                        data_ajax = "true",
+                                        data_ajax_method = "POST",
+                                        data_ajax_success = "on" + action + "Success"
+                                    })
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <img src="~/images/items/@item.img_loc" class="itemImage" />
+                <a href="#" class="iteminfo" data-toggle="popover" data-placement="left" data-popover-content=".equipmenthover"></a>
+                <div class="hoverinfo equipmenthover hidden">
+                    <div class="popover-heading">
+                        <img class="itemimg" src="~/images/items/@item.img_loc" />
+                    </div>
+                    <div class="popover-body">
+                        <div class="itemName">@item.name</div>
+                        <div class="stat">Level : @item.level</div>
+                        <div class="stat strstat">Strength : @item.strength</div>
+                        <div class="stat intstat">Intelligence : @item.intelligence</div>
+                        <div class="itemdescription">@item.description</div>
+                    </div>
+                </div>
+                @:</div>
+        }
+        @:</div>
+    @:</div>
+}

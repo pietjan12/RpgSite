@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-sm-12 headercolor">
                 <h1 class="articlehead">@Model.News.First().Title</h1>
-                <p class="authortext">@Model.News.First().user.username - @Model.News.First().PostDate.ToString("dd/MM/yyyy")</p>
+                <p class="authortext">@Model.News.First().author - @Model.News.First().PostDate.ToString("dd/MM/yyyy")</p>
                 <div class="img-wrapper">
                     <img src="/@Model.News.First().Img_Loc" class="fullimg">
                 </div>

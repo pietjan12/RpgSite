@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Api.Models;
 
-namespace Api.Interfaces
+namespace Data.Repos.Interfaces
 {
-    public interface INews
+    //gebruik maken van een interface voor repository zodat dependency injection gebruikt kan worden.
+    public interface INewsRepository
     {
         IEnumerable<News> GetAll();
         IEnumerable<News> GetByID(int id);

@@ -11,13 +11,13 @@
             </span>
             </div>
         </form>
-</div>
+    </div>
     @if (Model != null && Model.character != null)
     {
     <div class="character">
         <!-- TODO : popup toevoegen als er op gehovert wordt. -->
         <div class="left-items">
-            @foreach (var item in Model.character.inventory.Take(5))
+            @foreach (var item in Model.character.inventory.Where(i => i.category < 5))
             {
                 @:<div class="square">
                     <img src="~/images/items/@item.img_loc" class="itemImage" />
@@ -43,7 +43,7 @@
             <h1 class="character_name"> @Model.character.naam </h1>
         </div>
         <div class="right-items">
-            @foreach (var item in Model.character.inventory.TakeLast(5))
+            @foreach (var item in Model.character.inventory.Where(i => i.category >= 5))
             {
                 @:<div class="square">
                     <img src="~/images/items/@item.img_loc" class="itemImage" />
