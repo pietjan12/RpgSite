@@ -15,5 +15,7 @@ namespace Api.Models
         public int level { get; set; }
         public List<Item> inventory { get; set; }
         public List<Skill> skills { get; set; }
+        //Foreign key
+        public int userID { get; set; }
     }
 }

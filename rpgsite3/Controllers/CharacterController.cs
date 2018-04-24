@@ -25,9 +25,12 @@ namespace rpgsite3.Controllers
             {
                 //Er wordt gezocht, juiste model en gegevens meegeven
                 var model = new CharacterModel();
-                var _Character = _CharacterService.FindCharacterByName(characterSearch);
+                var _Character = _CharacterService.FindCharacterByName(characterSearch, false);
                 if (_Character != null)
                 {
+                    //Alleen equipped dingen meegeven naar character page
+                    _Character.inventory = _Character.inventory.Where(i => i.equipped == true).ToList();
+
                     model.character = _Character;
                     return View(model);
                 }
@@ -90,8 +93,22 @@ namespace rpgsite3.Controllers
         public IActionResult GetInventory(string charactername) {
             if (!string.IsNullOrEmpty(charactername)) {
                 var model = new CharacterModel();
-                var _MyChosenCharacter = _CharacterService.FindCharacterByName(charactername);
+                var _MyChosenCharacter = _CharacterService.FindCharacterByName(charactername, true);
                 if (_MyChosenCharacter != null) {
+                    model.character = _MyChosenCharacter;
+                    return View(model);
+                }
+            }
+            return null;
+        }
+
+        [HttpPost]
+        public IActionResult GetEquipment(string charactername) {
+            if(!string.IsNullOrEmpty(charactername)) {
+                var model = new CharacterModel();
+                var _MyChosenCharacter = _CharacterService.FindCharacterByName(charactername, false);
+                if (_MyChosenCharacter != null)
+                {
                     model.character = _MyChosenCharacter;
                     return View(model);
                 }
@@ -105,24 +122,24 @@ namespace rpgsite3.Controllers
         
         //IN DIT GEVAL WORDT HTML.ACTIONLINK GEBRUIKT VOOR DE BUILT-IN OMZETTER VAN COMPLEXE OBJECTEN NAAR PARAMETERS. 
         [HttpPost]
-        public IActionResult use(Item test)
+        public IActionResult use(Item myItem)
         {
-            bool used = _CharacterService.UseItem(test);
-            return Json(test);
+            bool used = _CharacterService.UseItem(myItem);
+            return Json(myItem);
         }
 
         [HttpPost]
-        public IActionResult equip(Item test)
+        public IActionResult equip(Item myItem, int characterID)
         {
-            _CharacterService.EquipItem(test);
+            _CharacterService.EquipItem(myItem, characterID);
 
-            return Json(test);
+            return Json(myItem);
         }
 
         [HttpPost]
-        public IActionResult drop(Item test)
+        public IActionResult drop(Item myItem)
         {
-            bool droppedItem = _CharacterService.DropItem(test);
+            bool droppedItem = _CharacterService.DropItem(myItem);
             return Json(droppedItem);
         }
     }

@@ -1,4 +1,4 @@
-﻿using Api.Interfaces;
+﻿using Data.Repos.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -13,10 +13,10 @@ namespace Services
 {
     public class AccountService : IAccountService
     {
-        private readonly IAccount _context;
+        private readonly IAccountRepository _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(IAccount context, IHttpContextAccessor HttpContextAccessor)
+        public AccountService(IAccountRepository context, IHttpContextAccessor HttpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = HttpContextAccessor;
@@ -92,6 +92,11 @@ namespace Services
             }
             //Standaard blokkeren.
             return true;
+        }
+
+        public List<int> GetPlayerCountByRole()
+        {
+            return _context.GetPlayerCountByRole();
         }
     }
 }
