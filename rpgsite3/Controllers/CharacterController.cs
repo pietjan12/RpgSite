@@ -77,7 +77,7 @@ namespace rpgsite3.Controllers
                     //Alle characters van deze persoon in de database ophalen
                     var characters = _CharacterService.FindMyCharacters(username);
                     //Controleren of er iets in de list zit.
-                    if (characters != null && characters.Count() > 0)
+                    if (characters != null)
                     {
                         //Model vullen en doorgeven aan view
                         model.foundCharacters = characters;

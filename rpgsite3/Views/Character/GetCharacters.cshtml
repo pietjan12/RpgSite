@@ -1,6 +1,6 @@
 ﻿@model rpgsite3.Models.CharacterModel
 
-@if (Model != null && Model.foundCharacters != null && Model.foundCharacters.Count > 0)
+@if (Model != null && Model.foundCharacters != null)
 {
     @:<div id="characterlist">
         @foreach (var item in Model.foundCharacters)
