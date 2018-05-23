@@ -7,6 +7,12 @@ namespace Api.Models
 {
     public class Character
     {
+        public Character()
+        {
+            inventory = new List<Item>();
+            skills = new List<Skill>();
+        }
+
         [Key]
         public int id { get; set; }
         public string naam { get; set; }
@@ -15,5 +21,7 @@ namespace Api.Models
         public int level { get; set; }
         public List<Item> inventory { get; set; }
         public List<Skill> skills { get; set; }
+        //Foreign key
+        public int userID { get; set; }
     }
 }

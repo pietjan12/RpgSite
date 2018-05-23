@@ -25,9 +25,13 @@ namespace rpgsite3.Controllers
             {
                 //Er wordt gezocht, juiste model en gegevens meegeven
                 var model = new CharacterModel();
-                var _Character = _CharacterService.FindCharacterByName(characterSearch);
+                var _Character = _CharacterService.FindCharacterByName(characterSearch, false);
                 if (_Character != null)
                 {
+                    //Alleen equipped dingen meegeven naar character page
+                    IEnumerable<Item> EquippedItems = _Character.inventory.OfType<Equippable>().Where(i => i.equipped == true);
+                    _Character.inventory = EquippedItems.ToList();
+
                     model.character = _Character;
                     return View(model);
                 }
@@ -57,7 +61,7 @@ namespace rpgsite3.Controllers
             return View();
         }
 
-        //Ophalen alle characters van gebruiker met partialview.
+        //AJAX POST CALLS die vanuit de game komen, die direct verband hebben met de character
         [HttpPost]
         public IActionResult GetCharacters()
         {
@@ -90,7 +94,7 @@ namespace rpgsite3.Controllers
         public IActionResult GetInventory(string charactername) {
             if (!string.IsNullOrEmpty(charactername)) {
                 var model = new CharacterModel();
-                var _MyChosenCharacter = _CharacterService.FindCharacterByName(charactername);
+                var _MyChosenCharacter = _CharacterService.FindCharacterByName(charactername, true);
                 if (_MyChosenCharacter != null) {
                     model.character = _MyChosenCharacter;
                     return View(model);
@@ -99,31 +103,71 @@ namespace rpgsite3.Controllers
             return null;
         }
 
-
-        // game calls die inventory beinvloeden.
-        //TODO MAKEN
-        
-        //IN DIT GEVAL WORDT HTML.ACTIONLINK GEBRUIKT VOOR DE BUILT-IN OMZETTER VAN COMPLEXE OBJECTEN NAAR PARAMETERS. 
         [HttpPost]
-        public IActionResult use(Item test)
-        {
-            bool used = _CharacterService.UseItem(test);
-            return Json(test);
+        public IActionResult GetEquipment(string charactername) {
+            if(!string.IsNullOrEmpty(charactername)) {
+                var model = new CharacterModel();
+                var _MyChosenCharacter = _CharacterService.FindCharacterByName(charactername, false);
+                if (_MyChosenCharacter != null)
+                {
+                    model.character = _MyChosenCharacter;
+                    return View(model);
+                }
+            }
+            return null;
         }
 
         [HttpPost]
-        public IActionResult equip(Item test)
+        public IActionResult GetBattleMenu(string charactername)
         {
-            _CharacterService.EquipItem(test);
-
-            return Json(test);
+            if (!string.IsNullOrEmpty(charactername))
+            {
+                var model = new CharacterModel();
+                var _MyChosenCharacter = _CharacterService.FindCharacterByName(charactername, false);
+                if (_MyChosenCharacter != null)
+                {
+                    model.character = _MyChosenCharacter;
+                    return View(model);
+                }
+            }
+            return null;
         }
 
         [HttpPost]
-        public IActionResult drop(Item test)
+        public IActionResult CreateCharacter(string charactername)
         {
-            bool droppedItem = _CharacterService.DropItem(test);
+            bool used = _CharacterService.AddCharacter(charactername);
+            return Json(used);
+        }
+
+        //Inventory calls
+        [HttpPost]
+        public IActionResult use(Consumable myItem)
+        {
+            bool used = _CharacterService.UseItem(myItem);
+            return Json(myItem);
+        }
+
+        [HttpPost]
+        public IActionResult equip(Equippable myItem, int characterID)
+        {
+            _CharacterService.EquipItem(myItem, characterID);
+
+            return Json(myItem);
+        }
+
+        [HttpPost]
+        public IActionResult drop(Item myItem)
+        {
+            bool droppedItem = _CharacterService.DropItem(myItem);
             return Json(droppedItem);
+        }
+
+        [HttpPost]
+        public IActionResult generateVictoryItems(string charactername) {
+            Character c = _CharacterService.FindCharacterByName(charactername, false);
+            bool GeneratedItems = _CharacterService.generateVictoryItems(c.id);
+            return Json(GeneratedItems);
         }
     }
 }

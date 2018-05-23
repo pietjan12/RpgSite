@@ -1,0 +1,20 @@
+﻿@model rpgsite3.Models.CharacterModel
+@{
+    Layout = null;
+}
+
+@if (Model != null && Model.character != null)
+{
+    foreach (var skill in Model.character.skills) { 
+        @:<div id="@skill.id" class="battlebtn">
+            /* @Html.ActionLink(skill.name, "useSkill", "Character", new { skill.id, skill.name, skill.description, skill.damage, skill.level }, new
+            {
+                data_ajax = "true",
+                data_ajax_method = "POST",
+                data_ajax_success = "onSkillSuccess"
+            }); */
+            @skill.name
+            <div id="damage" class="hidden">@skill.damage</div>
+        @:</div>
+    }
+}

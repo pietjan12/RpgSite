@@ -16,6 +16,7 @@ interface IGameConstructor {
 module RpgGame {
     //Globale variabelen.
     export declare var speler: Player;
+    export declare var ANIM_SPEED: number;
 
     export class Game extends Phaser.Game {
 
@@ -28,8 +29,13 @@ module RpgGame {
                 aParams.transparent,
                 aParams.antialias,
                 aParams.physicsConfig);
-            /* MAIN MENU LADEN */
+
+            ANIM_SPEED = 1;
+            /* STATES TOEVOEGEN */ 
             this.state.add('MainMenu', MainMenu, false);
+            this.state.add('GameState', GameState, false);
+            this.state.add('BattleMenu', BattleState, false);
+
             this.state.start('MainMenu');
         }
     }
@@ -37,8 +43,8 @@ module RpgGame {
 
 window.onload = () => {
     var game = new RpgGame.Game({
-        width: 1920,
-        height: 1080,
+        width: window.screen.width * window.devicePixelRatio,
+        height: window.screen.height * window.devicePixelRatio,
         renderer: Phaser.AUTO,
         parent: 'phaserGame',
         transparent: false,

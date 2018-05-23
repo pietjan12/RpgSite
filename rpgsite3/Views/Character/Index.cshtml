@@ -1,5 +1,19 @@
-﻿@model rpgsite3.Models.CharacterModel
+﻿@using Api.Models;
+@model rpgsite3.Models.CharacterModel
+@{
+    ViewData["Title"] = "Character";
+    
+    //Equippeditems opvragen en sorteren op categorie.
+    IEnumerable<Equippable> LeftEquipped = null;
+    IEnumerable<Equippable> RightEquipped = null;
 
+    if (Model != null && Model.character != null)
+    {
+        IEnumerable<Equippable> EquippedItems = Model.character.inventory.OfType<Equippable>();
+        LeftEquipped = EquippedItems.Where(i => i.category < 5);
+        RightEquipped = EquippedItems.Where(i => i.category >= 5);
+    }
+}
 
 <div class="user-background">
     <div class="searchbar">
@@ -11,13 +25,13 @@
             </span>
             </div>
         </form>
-</div>
+    </div>
     @if (Model != null && Model.character != null)
     {
     <div class="character">
         <!-- TODO : popup toevoegen als er op gehovert wordt. -->
         <div class="left-items">
-            @foreach (var item in Model.character.inventory.Take(5))
+            @foreach (var item in LeftEquipped)
             {
                 @:<div class="square">
                     <img src="~/images/items/@item.img_loc" class="itemImage" />
@@ -43,7 +57,7 @@
             <h1 class="character_name"> @Model.character.naam </h1>
         </div>
         <div class="right-items">
-            @foreach (var item in Model.character.inventory.TakeLast(5))
+            @foreach (var item in RightEquipped)
             {
                 @:<div class="square">
                     <img src="~/images/items/@item.img_loc" class="itemImage" />

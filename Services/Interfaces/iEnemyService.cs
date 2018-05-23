@@ -9,5 +9,7 @@ namespace Services
     {
         IEnumerable<Monster> getAllMonsters();
         IEnumerable<Monster> findMonsterByName(String name);
+        IEnumerable<Monster> GenerateMonsters();
+        void ChangeType(StorageType type);
     }
 }

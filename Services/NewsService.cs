@@ -3,19 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Api.Models;
-using Api.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Linq;
+using Data.Repos.Interfaces;
 
 namespace Services
 {
     public class NewsService : INewsService
     {
-        private readonly INews _context;
+        private readonly INewsRepository _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public NewsService(INews context, IHttpContextAccessor httpContextAccessor)
+        public NewsService(INewsRepository context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
@@ -36,7 +36,7 @@ namespace Services
             return _context.EditArticle(id, title, text, img_loc);
         }
 
-        public IEnumerable<News> FindNewsById(int id)
+        public News FindNewsById(int id)
         {
             return _context.GetByID(id);
         }
@@ -46,6 +46,10 @@ namespace Services
             return _context.GetAll();
         }
 
+        public void ChangeType(StorageType type)
+        {
+            _context.ChangeType(type);
+        }
         private string getUsername()
         {
             var identity = (ClaimsIdentity)_httpContextAccessor.HttpContext.User.Identity;

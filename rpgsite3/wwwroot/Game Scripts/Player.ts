@@ -1,71 +1,43 @@
 ﻿/// <reference path="../lib/Phaser/phaser.d.ts"/>
 /// <reference path="../lib/Phaser/phaser-tiled.d.ts"/>
+/// <reference path="Unit.ts"/>
 
 module RpgGame {
-    export enum playerStates {
-      ALIVE,
-      HIT,
-      DEAD
-    }
 
-    export enum lookingDirection {
-        LEFT,
-        RIGHT,
-        DOWN,
-        UP
-    }
-
-    export class Player extends Phaser.Sprite {
+    export class Player extends Unit {
         private playername: string;
-        private level: number;
-        private strength: number;
-        private intelligence: number;
-        //inventory
         private inventory: InventorySystem;
 
-      /*  private walkingSpeed: number = 100.0;
-        private isCollidingWithTerrain: boolean = false;
-        private playerHealth: number = 40.0;
-        private healthText: any;
-        private currentState: any;
-        private currentLookingDirection: any;
-        private isHitting: boolean = false;
-        private hitCountdown: number = 20.0;
+        private canMove: boolean;
+        private moveSpeed: number;
 
-        private playerAnimations: Phaser.Animation[] = [];
-
-        public getStatusCollideWithTerrain(): boolean { return this.isCollidingWithTerrain; }
-        public setStatusCollideWithTerrain(collide: boolean): void { this.isCollidingWithTerrain = collide; }
-
-        public getPlayerHealth(): number { return this.playerHealth; }
-        public setPlayerHealth(health: number): void { this.playerHealth = health; }
-
-        public getCurrentState(): any { return this.currentState; }
-        public setCurrentState(state: any): void { this.currentState = state; } */
-
-
-        constructor(game: Phaser.Game, x?: number, y?: number, key?: string, frame?: string | number) {
-            super(game, x, y, 'player', 0);
+        constructor(game: Phaser.Game,MaxHealth: number , x?: number, y?: number, key?: string, frame?: string | number) {
+            //Speler mag altijd als eerste slaan in een battle.
+            super(game, 1, 1, MaxHealth ,x, y, key, 0);
 
             //Waardes goedzetten.
             //this.currentState = playerStates.ALIVE;
             //this.isHitting = false;
+            this.canMove = true;
+            this.moveSpeed = 150;
 
             this.inventory = new InventorySystem();
             //base values
-            this.strength = 10;
-            this.intelligence = 10;
+           /*  this.strength = 10;
+            this.intelligence = 10; */
 
             //Sprite control
             this.anchor.setTo(0.5, 0.5);
             this.scale.set(2);
 
-           
-        }
+            //animaties toevoegen vanuit spritesheet. wordt geplitst in preload van mainmenu
+            this.animations.add('up', [0, 1, 2]);
+            this.animations.add('right', [3, 4, 5]);
+            this.animations.add('down', [6, 7, 8]);
+            this.animations.add('left', [9, 10, 11]);
+            this.animations.add('idle', [7]);
 
-        public AddToGame(game: Phaser.Game) {
-            game.physics.enable(this, Phaser.Physics.ARCADE);
-            game.add.existing(this);
+           
         }
 
         public GetInventory() {
@@ -73,11 +45,11 @@ module RpgGame {
         }
 
         public GetStrength() {
-            return this.strength;
+            return super.getStrength();
         }
 
         public GetIntelligence() {
-            return this.intelligence;
+            return super.getIntelligence();
         }
 
         public SetName(name) {
@@ -85,15 +57,37 @@ module RpgGame {
         }
 
         public SetLevel(level) {
-            this.level = level;
+            super.setLevel(level);
         }
 
         public SetStrength(strength) {
-            this.strength = strength;
+            super.setStrength(strength);
         }
 
         public SetIntelligence(intelligence) {
-            this.intelligence = intelligence;
+            super.setIntelligence(intelligence);
+        }
+
+        public getCanPlayerMove() {
+            return this.canMove;
+        }
+
+        public setCanPlayerMove(canMove) {
+            this.canMove = canMove;
+        }
+
+        public UpdateStats() {
+            this.SetStrength(10);
+            this.SetIntelligence(10);
+            this.inventory.updateStats();
+        }
+
+        public GetHealth() {
+            return super.GetCurrentHealth();
+        }
+
+        public SetHealth(health) {
+            super.SetCurrentHealth(health);
         }
 
         update() {
@@ -101,22 +95,31 @@ module RpgGame {
             this.body.velocity.x = 0;
             this.body.velocity.y = 0;
 
-            if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            if (this.canMove) {
+                if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
 
-                this.body.velocity.x = -150;
-                //this.animations.play('walk');
-            }
-            else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+                    this.body.velocity.x = -150;
+                    this.animations.play('left', 10, true);
+                    //this.animations.play('walk');
+                }
+                else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
 
-                this.body.velocity.x = 150;
-                //this.animations.play('walk');
-            } else if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-                this.body.velocity.y = -150;
-            } else if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-                this.body.velocity.y = 150;
-            }
-            else {
-                //this.animations.frame = 0;
+                    this.body.velocity.x = this.moveSpeed;
+                    this.animations.play('right', 20, true);
+                    //this.animations.play('walk');
+                } else if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+                    this.body.velocity.y = -this.moveSpeed;
+                    this.animations.play('up', 20, true);
+                } else if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+                    this.body.velocity.y = this.moveSpeed;
+                    this.animations.play('down', 20, true);
+                }
+                else {
+                    this.animations.play('idle', 1, true);
+                }
+            } else {
+                //idle animatie spelen
+                this.animations.play('idle', 1, true);
             }
 
             //Collision check

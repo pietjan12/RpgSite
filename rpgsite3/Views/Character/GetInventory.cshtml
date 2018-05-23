@@ -1,6 +1,9 @@
-﻿@model rpgsite3.Models.CharacterModel
+﻿@using Api.Models;
+@model rpgsite3.Models.CharacterModel
 @{
     Layout = null;
+    var UnequippedEquippables = Model.character.inventory.OfType<Equippable>().Where(i => i.equipped == false);
+    var Consumables = Model.character.inventory.OfType<Consumable>();
 }
 
 
@@ -8,10 +11,8 @@
 {
     <div class="gameh1">Inventory - @Model.character.naam</div>
     @:<div id="inventorywrapper">
-        //Door Alle items heen loopen
-    foreach (var item in Model.character.inventory)
-    {
-        if (item.equipped == false)
+        //Eerst door alle consumables heen loopen
+        foreach (var item in Consumables)
         {
             @:<div class="square gameinventoryitem">
                 <div class="context-menu hidden">
@@ -21,20 +22,57 @@
                             @foreach (var action in item.actions)
                             {
                                 <li class="@action-btn">
-                                    @Html.ActionLink(item.equipped && action == "Equip" ? "Unequip" : action, action, "Character", item, new
-                               {
-                                   data_ajax = "true",
-                                   data_ajax_method = "POST",
-                                   data_ajax_success = "on" + action + "Success"
-                               })
+                                    @Html.ActionLink(action, action, "Character", new { item.id, item.name, item.description, item.img_loc, item.Healing, item.Rarity, item.category, item.actions, characterID = Model.character.id }, new
+                                   {
+                                       data_ajax = "true",
+                                       data_ajax_method = "POST",
+                                       data_ajax_success = "on" + action + "Success"
+                                   })
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                    <img src="~/images/items/@item.img_loc" class="itemImage" />
+                    <a href="#" class="iteminfo" data-toggle="popover" data-placement="left" data-popover-content=".inventoryhover"></a>
+                    <div class="hoverinfo inventoryhover hidden">
+                        <div class="popover-heading">
+                            <img class="itemimg" src="~/images/items/@item.img_loc" />
+                        </div>
+                        <div class="popover-body">
+                            <div class="itemName">@item.name</div>
+                            <div class="stat">Healing : @item.Healing</div>
+                            <div class="itemdescription">@item.description</div>
+                        </div>
+                    </div>
+            @:</div>
+        }
+
+        //Daarna door alle unequipped equippables heenloopen
+        foreach (var item in UnequippedEquippables)
+        {
+            @:<div class="square gameinventoryitem">
+                <div class="context-menu hidden">
+                    <ul>
+                        @if (item.actions != null)
+                        {
+                            @foreach (var action in item.actions)
+                            {
+                                <li class="@action-btn">
+                                    @Html.ActionLink(item.equipped && action == "Equip" ? "Unequip" : action, action, "Character", new { item.id, item.name, item.description, item.img_loc, item.strength, item.intelligence, item.Rarity, item.level, item.category, item.actions, item.equipped, characterID = Model.character.id }, new
+                                   {
+                                       data_ajax = "true",
+                                       data_ajax_method = "POST",
+                                       data_ajax_success = "on" + action + "Success"
+                                   })
                                 </li>
                             }
                         }
                     </ul>
                 </div>
                 <img src="~/images/items/@item.img_loc" class="itemImage" />
-                <a href="#" class="iteminfo" data-toggle="popover" data-placement="left" data-popover-content=".hoverinfo"></a>
-                <div class="hoverinfo hidden">
+                <a href="#" class="iteminfo" data-toggle="popover" data-placement="left" data-popover-content=".inventoryhover"></a>
+                <div class="hoverinfo inventoryhover hidden">
                     <div class="popover-heading">
                         <img class="itemimg" src="~/images/items/@item.img_loc" />
                     </div>
@@ -49,6 +87,5 @@
                 </div>
             @:</div>
         }
-    }
     @:</div>
 }

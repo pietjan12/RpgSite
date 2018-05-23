@@ -8,6 +8,8 @@ namespace rpgsite3.Models
 {
     public class GameIndexModel
     {
+        public int NormalPlayerCount { get; set; }
+        public int AdminPlayerCount { get; set; }
         public IEnumerable<Monster> enemies { get; set; }
     }
 }

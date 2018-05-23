@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Api.Models;
-using Api.Interfaces;
 using System.Linq;
+using Data.Repos.Interfaces;
 
 namespace Services
 {
     //IF1RepositorySqlContext
     public class EnemyService : iEnemyService
     {
-        private readonly IEnemies _context;
+        private readonly IEnemyRepository _context;
 
-        public EnemyService(IEnemies context)
+        public EnemyService(IEnemyRepository context)
         {   
             _context = context;
         }
@@ -25,6 +25,17 @@ namespace Services
         public IEnumerable<Monster> getAllMonsters()
         {
             return _context.getAll();
+        }
+
+        public IEnumerable<Monster> GenerateMonsters() {
+            Random r = new Random();
+            int amountToGenerate = r.Next(1, 4);
+
+            return _context.GenerateMonsters(amountToGenerate);
+        }
+        public void ChangeType(StorageType type)
+        {
+            _context.ChangeType(type);
         }
     }
 }

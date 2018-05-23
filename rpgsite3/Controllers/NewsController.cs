@@ -10,6 +10,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Api.Models;
 
 namespace rpgsite3.Controllers
 {
@@ -42,12 +43,11 @@ namespace rpgsite3.Controllers
         {
             ViewData["Title"] = "News";
 
-            var NewsList = _NewsService.FindNewsById(id);
+            var article = _NewsService.FindNewsById(id);
 
-            var model = new NewsModel()
-            {
-                News = NewsList.ToList()
-            };
+            var model = new NewsModel();
+            //artikel toevoegen
+            model.News.Add(article);
 
             return View(model);
         }
@@ -73,12 +73,10 @@ namespace rpgsite3.Controllers
             if(id != null)
             {
                 //Int converteren naar gewone type int.
-                var NewsList = _NewsService.FindNewsById(Convert.ToInt32(id));
+                var NewsArticle = _NewsService.FindNewsById(Convert.ToInt32(id));
 
-                var model = new NewsModel()
-                {
-                    News = NewsList.ToList()
-                };
+                var model = new NewsModel();
+                model.News.Add(NewsArticle);
 
                 return View(model);
             }

@@ -1,0 +1,43 @@
+﻿@model rpgsite3.Models.CharacterModel
+@{
+    Layout = null;
+}
+
+@if (Model != null && Model.character != null)
+{
+    @:<div class="battlewrapper">
+        <div class="bottompart">
+            <div class="healthstatus">
+                @Model.character.naam
+            </div>
+            <div id="actions" class="actions">
+                <div id="attackbtn" class="battlebtn">Attack</div>
+                <div id="itembtn" class="battlebtn">Item</div>
+                <div id="skipbtn" class="battlebtn">Skip</div>
+                <div id="fleebtn" class="battlebtn">Flee</div>
+            </div>
+            <div id="skillslist" class="hidden">
+                @foreach (var skill in Model.character.skills)
+                {
+                    @:<div id="@skill.id" class="battlebtn">
+                        @skill.name
+                        <div id="damage" class="hidden">@skill.damage</div>
+                    @:</div>
+                }
+            </div>
+            <div id="itemslist" class="hidden">
+                @foreach(var item in Model.character.inventory)
+                {
+                    if(item.category == 2)
+                    {
+                        //Het is een consumable
+                        <div id="@item.id" class="battlebtn">
+                            @item.name
+                        </div>
+
+                    }
+                }
+            </div>
+        </div>
+    @:</div>
+}

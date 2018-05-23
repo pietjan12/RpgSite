@@ -1,15 +1,4 @@
-﻿//Veelgebruikte functies
-function hideMainMenu() {
-    $("#MainMenu").find('#play').addClass("hidden");
-    $("#MainMenu").find('#optionsbtn').addClass("hidden");
-    $("#MainMenu").find('#quitmenu').addClass("hidden");
-};
-
-function showMainMenu() {
-    $("#MainMenu").find('#play').removeClass("hidden");
-    $("#MainMenu").find('#optionsbtn').removeClass("hidden");
-    $("#MainMenu").find('#quitmenu').removeClass("hidden");
-}
+﻿/* AJAX ONSUCCESS CALLS */
 
 //Characters ophalen main menu
 function OnGetCharacters(data) {
@@ -20,7 +9,26 @@ function OnGetCharacters(data) {
     charactermenu.empty();
     charactermenu.prepend(data);
     charactermenu.removeClass("hidden");
-};
+}
+
+function OnCreateCharacter(data) {
+    var errorLabel = document.getElementById("errorlabel");
+    //controleren of character aangemaakt is
+    console.log(data);
+    if (data === true) {
+        //Aangepast
+        errorLabel.classList.add("hidden");
+        //Gebruikerslist updaten, dit is het makkelijkst door gewoon de juiste knop programmatisch aan te klikken.
+        document.getElementById("BackToCharacters").click();
+        document.getElementById("backtomenu").click();
+        document.getElementById("play").click();
+    } else {
+        //Niks aangepast
+        errorLabel.innerText = "Gebruiker is niet aangemaakt! Gebruikersnaam is mogelijk al bezet.";
+        errorLabel.classList.remove("hidden");
+    }
+}
+
 
 function OnGetInventory(data) {
     hideMainMenu();
@@ -32,28 +40,41 @@ function OnGetInventory(data) {
 
     //Speler inventory updaten
     window.player.inventory.FillInventory();
+
+    //equipment ophalen
+    refreshEquipment();
+    //Battle Menu Updaten Voor Character
+    refreshBattleMenu();
+}
+
+function OnGetEquipment(data) {
+    var equipmentmenu = $("#MainMenu").find('#equipment');
+    equipmentmenu.empty();
+    equipmentmenu.prepend(data);
+
+    //?? misschien
+    window.player.inventory.FillEquipment();
+    window.player.UpdateStats();
+    //window.player.inventory.FillEquipment();
+}
+
+function OnGetBattleMenu(data) {
+    var battlemenuwrapper = document.getElementById("battlemenu");
+    battlemenuwrapper.innerHTML = "";
+    battlemenuwrapper.innerHTML = data;
 }
 
 function onEquipSuccess(data) {
-    //item weghalen uit inventory en toevoegen aan equipment
-    console.log("Item Equip Status : " + data);
-
     window.player.inventory.EquipItem(data);
     refreshInventory();
 }
 
 function onUseSuccess(data) {
-    console.log("Used Item : " + data);
-    //item verwijderen uit html en effect toepassen ?? kijken hoe dit werkt
-
     window.player.inventory.UseItem(data);
     refreshInventory();
 }
 
 function onDropSuccess(data) {
-    console.log("Dropped Item : " + data);
-    //item verwijderen uit inventory
-
     window.player.inventory.RemoveItem(data);
     refreshInventory();
 }
@@ -71,7 +92,50 @@ function refreshInventory() {
     }); 
 }
 
+function refreshEquipment() {
+    //Equipment ophalen
+    var characterName = $("#inventory").find(".gameh1").text().split(" - ")[1];
 
+    $.ajax({
+        url: "../Character/GetEquipment",
+        type: "POST",
+        data: { charactername: characterName },
+        success: function (data) {
+            OnGetEquipment(data);
+        }
+    }); 
+}
+
+function refreshBattleMenu() {
+    //skills ophalen
+    var characterName = $("#inventory").find(".gameh1").text().split(" - ")[1];
+
+    $.ajax({
+        url: "../Character/GetBattleMenu",
+        type: "POST",
+        data: { charactername: characterName },
+        success: function (data) {
+            OnGetBattleMenu(data);
+        }
+    }); 
+}
+/* AJAX ONSUCCESS CALLS */
+
+/* Veelgebruikte functies */
+function hideMainMenu() {
+    $("#MainMenu").find('#play').addClass("hidden");
+    $("#MainMenu").find('#optionsbtn').addClass("hidden");
+    $("#MainMenu").find('#quitmenu').addClass("hidden");
+}
+
+function showMainMenu() {
+    $("#MainMenu").find('#play').removeClass("hidden");
+    $("#MainMenu").find('#optionsbtn').removeClass("hidden");
+    $("#MainMenu").find('#quitmenu').removeClass("hidden");
+}
+/* Veelgebruikte functies */
+
+/* Click handlers */
 $(document).ready(function () {
     //Optionsmenu openen
     $('#optionsbtn').on('click', function () {
@@ -102,16 +166,32 @@ $(document).ready(function () {
 
     //Create Character Knop
     $('body').on('click', '#createcharacter', function () {
-        console.log("Create character");
+        //create character knop onzichtbaar maken
+        $(this).addClass("hidden");
+        //Characterlist en back button verbergen
+        $("#characterlist").addClass("hidden");
+        $("#backtomenu").addClass("hidden");
+
+        //Wrapper zichtbaar maken
+        var characterCreateWrapper = $("#createcharacterwrapper");
+        characterCreateWrapper.removeClass("hidden");
     });
 
-/*    $('body').on('click', '.characteroverlay', function () {
-        var name = $(this).find(".charactername").text();
-        var level = $(this).find(".characterlevel").text();
+    //back to characters knop
+    $('body').on('click', '#BackToCharacters', function () {
+        //Wrapper onzichtbaar maken
+        var characterCreateWrapper = $("#createcharacterwrapper");
+        characterCreateWrapper.addClass("hidden");
+        //Knop zichtbaar maken
+        $("#createcharacter").removeClass("hidden");
+        //characterlist en back button zichtbaar maken
+        $("#characterlist").removeClass("hidden");
+        $("#backtomenu").removeClass("hidden");
+    });
 
-        
-        console.log(window.spelerObject);
-    }); */
-
-
+    $(document).keydown(function (e) {
+        if (e.which === 32 || e.which === 40 || e.which === 38 || e.which === 37 || e.which === 39) {
+            e.preventDefault();
+        }
+    });
 });

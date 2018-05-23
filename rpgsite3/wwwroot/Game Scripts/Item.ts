@@ -1,5 +1,5 @@
 ﻿module RpgGame {
-    //Basis elementen van een item, rest komt vanuit asp zelf.
+    //Basis elementen van een item, wordt gebruikt om een item te consumeren.
     export class Item {
         private name: string;
         private description: string;

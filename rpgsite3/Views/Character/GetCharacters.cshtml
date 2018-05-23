@@ -2,20 +2,31 @@
 
 @if (Model != null && Model.foundCharacters != null && Model.foundCharacters.Count > 0)
 {
-    @foreach (var item in Model.foundCharacters)
-    {
-        @:<div class="characteroverlay">
-            <a class="ChooseCharacterBtn" asp-action="GetInventory" asp-controller="Character" data-ajax="true" data-ajax-method="POST" data-ajax-success="OnGetInventory" asp-route-charactername="@item.naam">
-                <div class="gamecharacter">
-                    <div class="charactername">@item.naam</div>
-                    <div class="characterlevel">@item.level</div>
-                </div>
-            </a>
-        @:</div>
-    }
-    @if (Model.foundCharacters.Count < 8)
+    @:<div id="characterlist">
+        @foreach (var item in Model.foundCharacters)
+        {
+            @:<div class="characteroverlay">
+                <a class="ChooseCharacterBtn" asp-action="GetInventory" asp-controller="Character" data-ajax="true" data-ajax-method="POST" data-ajax-success="OnGetInventory" asp-route-charactername="@item.naam">
+                    <div class="gamecharacter">
+                        <div class="charactername">@item.naam</div>
+                        <div class="characterlevel">@item.level</div>
+                    </div>
+                </a>
+            @:</div>
+        }
+    @:</div>
+    @if (Model.foundCharacters.Count < 4)
     {
         @:<button id="createcharacter" class="gamebtn">Create Character</button>
+        <div id="createcharacterwrapper" class="hidden">
+            <!-- form voor creeren character -->
+            <form  id="characterform" asp-action="CreateCharacter"asp-controller="Character" data-ajax="true" data-ajax-method="POST" data-ajax-success="OnCreateCharacter">
+                <label id="errorlabel" class="hidden"></label>
+                <input id="characternameinput" name="charactername" type="text" class="gamebtn" placeholder="naam" />
+                <input type="submit" class="gamebtn" />
+            </form>
+            <button id="BackToCharacters" class="gamebtn">Back</button>
+        </div>
     }
     <button id="backtomenu" class="gamebtn">Back</button>
 }
